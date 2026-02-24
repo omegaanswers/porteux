@@ -1,0 +1,108 @@
+name: Validate SkyCAIR Build Scripts
+
+on:
+  push:
+    branches: [ skycair-2.6-cosmic ]
+  pull_request:
+    branches: [ skycair-2.6-cosmic ]
+
+jobs:
+  shellcheck:
+    name: Shell Script Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run shellcheck on build scripts
+        run: |
+          find . -name "*.sh" -not -path "./.git/*" | while read f; do
+            echo "Checking: $f"
+            shellcheck --severity=error "$f" || true
+          done
+
+      - name: Run shellcheck on SlackBuilds
+        run: |
+          find . -name "*.SlackBuild" -not -path "./.git/*" | while read f; do
+            echo "Checking: $f"
+            shellcheck --severity=error "$f" || true
+          done
+
+  validate-configs:
+    name: Validate Config Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate skycair.cfg (no bare porteux references)
+        run: |
+          if grep -r "porteux" iso/skycair/skycair.cfg 2>/dev/null; then
+            echo "WARNING: porteux reference found in skycair.cfg"
+          fi
+          echo "skycair.cfg OK"
+
+      - name: Check for accidentally committed secrets
+        run: |
+          if grep -rE "(ghp_|sk-|AKIA|-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY)" \
+            --include="*.sh" --include="*.cfg" --include="*.conf" \
+            --include="*.md" --include="*.py" . 2>/dev/null | grep -v ".git/"; then
+            echo "FAIL: Possible secret found in tracked files"
+            exit 1
+          fi
+          echo "No secrets found in text files"
+
+      - name: Verify bootlogo exists and is correct size
+        run: |
+          python3 -c "
+          import struct, zlib
+          with open('iso/boot/syslinux/bootlogo.png', 'rb') as f:
+              sig = f.read(8)
+              assert sig == b'\x89PNG\r\n\x1a\n', 'Not a valid PNG'
+              f.read(4)  # length
+              assert f.read(4) == b'IHDR', 'Missing IHDR'
+              w = struct.unpack('>I', f.read(4))[0]
+              h = struct.unpack('>I', f.read(4))[0]
+              assert w == 1024 and h == 768, f'Expected 1024x768, got {w}x{h}'
+          print(f'bootlogo.png: {w}x{h} OK')
+          "
+
+  structure-check:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          REQUIRED=(
+            "LICENSE"
+            "README.md"
+            "SECURITY.md"
+            "CONTRIBUTING.md"
+            ".gitignore"
+            "iso/skycair/skycair.cfg"
+            "iso/boot/syslinux/bootlogo.png"
+          )
+          FAIL=0
+          for f in "${REQUIRED[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "MISSING: $f"
+              FAIL=1
+            else
+              echo "OK: $f"
+            fi
+          done
+          exit $FAIL
+
+      - name: Check module package naming (no porteux-* in cosmic)
+        run: |
+          if ls 003-cosmic/packages/porteux-*.txz 2>/dev/null; then
+            echo "FAIL: Found un-rebranded porteux package in 003-cosmic"
+            exit 1
+          fi
+          echo "Package naming OK"

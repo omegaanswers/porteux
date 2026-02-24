@@ -1,57 +1,55 @@
-## SkyCAIR Lite
+# SkyCAIR OS
 
-SkyCAIR Lite is a high-performance, modular, minimalist Linux distribution built on Slackware by **2XR, LLC | Evolve2Linux | 123Tech.net**.
+> **Care About AI Readiness** — From IoT sensor to enterprise data center, one codebase.
 
-- Contact: SkyCAIR@123Tech.net | (608) 454-6660
-- Address: 855 Community Dr, Sauk City, WI 53583
-- Product Page: https://123tech.net
+[![Validate Build Scripts](https://github.com/omegaanswers/porteux/actions/workflows/validate.yml/badge.svg?branch=skycair-2.6-cosmic)](https://github.com/omegaanswers/porteux/actions/workflows/validate.yml)
+[![License](https://img.shields.io/badge/license-Source%20Available-blue)](LICENSE)
+[![Version](https://img.shields.io/badge/version-v2.6.0-brightgreen)](https://github.com/omegaanswers/porteux/releases/tag/v2.6.0-skycair)
+[![Platform](https://img.shields.io/badge/platform-x86__64-lightgrey)](https://github.com/omegaanswers/porteux)
+[![Desktop](https://img.shields.io/badge/desktop-COSMIC-purple)](https://github.com/pop-os/cosmic-epoch)
 
-SkyCAIR customizations: https://github.com/omegaanswers/porteux/tree/skycair-2.6-cosmic
+**2XR, LLC | Evolve2Linux | 123Tech.net**
+
+| | |
+|---|---|
+| Website | https://123tech.net |
+| Contact | SkyCAIR@123Tech.net |
+| Phone | (608) 454-6660 |
+| Address | 855 Community Dr, Sauk City, WI 53583 |
+| Branch | [`skycair-2.6-cosmic`](https://github.com/omegaanswers/porteux/tree/skycair-2.6-cosmic) |
 
 ---
 
 ## About
 
-SkyCAIR Lite is a high-performance, modular, Slackware-based Linux distribution. Its main goal is to be super fast, small, portable, modular, and immutable (if the user wants so).
+SkyCAIR OS is a high-performance, modular, Slackware-based Linux distribution purpose-built
+for AI-ready infrastructure — from IoT edge devices to enterprise data centers.
 
-It's already pre-configured for basic usage, including lightweight applications for each of the 8 desktop environments available. No browser is included by default, but the SkyCAIR App Store provides the most popular browsers, Steam, VirtualBox, NVIDIA drivers, Wine, office suite, multilib (32-bit compatibility), messengers, emulators, and more.
+- **Blazing fast**: squashfs modules load into RAM at boot; full system in seconds
+- **Modular**: .xzm squashfs modules stack via overlayfs — add/remove features without reinstalling
+- **Portable**: runs live from USB, SD, or NVMe; no installation required
+- **Immutable option**: boot read-only with optional persistent save layer
+- **Multimedia-ready**: hardware acceleration enabled by default (Intel / AMD / NVIDIA)
+- **8 desktop environments**: COSMIC, Cinnamon, GNOME, KDE, LXDE, LXQt, MATE, Xfce
 
-Out of the box, SkyCAIR Lite can open basically any multimedia file. Hardware acceleration is enabled by default for machines with Intel, AMD, or NVIDIA cards (for NVIDIA cards, download the driver from the App Store).
-
----
-
-## How To Use
-
-SkyCAIR Lite is based on Slackware 64-bit current/rolling (bleeding edge). ISOs are available in 8 spins:
-
-- Cinnamon
-- COSMIC
-- GNOME
-- KDE
-- LXDE
-- LXQt
-- MATE
-- Xfce
-
-SkyCAIR Lite is a modular system — no traditional installer required. Copy the ISO content to your media storage and run from the `boot` folder either `skycair-installer-for-linux.run` or `skycair-installer-for-windows.exe` to make the unit bootable. Avoid ISO installer applications like Rufus or Etcher as they set the media to read-only by default. More details: [/boot/docs/install.txt](iso/boot/docs/install.txt).
-
-To use SkyCAIR Lite in a language other than English, download the multilanguage package and use the Language Switcher application.
+No browser is included by default — the **SkyCAIR App Store** provides browsers,
+Steam, VirtualBox, NVIDIA drivers, Wine, office suites, messengers, emulators, and more.
 
 ---
 
-## Installing New Applications
+## Quick Start
 
-To install applications not in the App Store or Slackware repository, AppImage format is recommended. Flatpak is available by default for accessing Flatpak repositories.
+1. Download the ISO from [123tech.net](https://123tech.net)
+2. Copy ISO content to your media storage
+3. Run the installer from the `boot` folder:
+   - Linux: `skycair-installer-for-linux.run`
+   - Windows: `skycair-installer-for-windows.exe`
+4. Boot and enjoy
 
-To download a Slackware package and convert it to an XZM module:
-```
-getpkg -m [packageName]
-```
-After the XZM module is created, double-click or run `activate [moduleName]` to activate it. Move the module to `/skycair/modules` to auto-load on boot.
+> Avoid Rufus/Etcher — they set media read-only by default, which disables persistence.
+> Full installation guide: [iso/boot/docs/install.txt](iso/boot/docs/install.txt)
 
----
-
-## Default Username and Password
+### Default Credentials
 
 ```
 username: guest    password: guest
@@ -60,32 +58,139 @@ username: root     password: toor
 
 ---
 
+## Desktop Environments
+
+| Spin | Description |
+|------|-------------|
+| **COSMIC** | System76's next-gen Wayland compositor (recommended) |
+| Cinnamon | Traditional, Windows-like layout |
+| GNOME | Clean, modern GNOME shell |
+| KDE | Feature-rich, highly customizable |
+| LXDE | Ultra-lightweight, older hardware |
+| LXQt | Qt-based lightweight desktop |
+| MATE | Classic GNOME 2 experience |
+| Xfce | Fast and lightweight GTK |
+
+---
+
+## Installing Applications
+
+**App Store** (recommended): Launch the SkyCAIR App Store for browsers, tools, and drivers.
+
+**AppImage**: Drop-and-run, no installation needed.
+
+**Slackware package → XZM module**:
+```bash
+getpkg -m <packageName>
+activate <moduleName>
+# Move to /skycair/modules/ for auto-load on boot
+```
+
+**Flatpak**: Available by default via the Flatpak runtime.
+
+---
+
 ## Performance
 
-SkyCAIR Lite is lightweight and snappy. Although it runs on older machines (SSE4.2 required), high-end machines will experience full performance potential. ISOs are small and RAM consumption is highly optimized.
-
-For best performance, install on SSD/NVMe rather than USB flash, or select **Copy To RAM** at boot.
+- Runs on any SSE4.2-capable x86_64 machine
+- Best performance: NVMe/SSD install, or **Copy To RAM** at boot (requires 2GB+ RAM)
+- Boot configuration: [`iso/skycair/skycair.cfg`](iso/skycair/skycair.cfg)
 
 ---
 
 ## Building
 
-SkyCAIR Lite can be built in a live session of Slackware 64-bit or SkyCAIR Lite 64-bit. Run `createModule.sh` as root in this order:
+Requires a **Slackware 64-bit current** or **SkyCAIR live** environment. Build as root:
 
-1. 000-kernel
-2. 001-core
-3. 002-gui
-4. 002-xtra
-5. 003-\<desktopenv\> (e.g. `003-cosmic`)
-6. (optional) 05-devel
-7. (optional) 08-multilanguage
-8. (optional) 0050-multilib-lite
+```bash
+# Build in this order:
+sh 000-kernel/createModule.sh
+sh 001-core/createModule.sh
+sh 002-gui/createModule.sh
+sh 002-xtra/createModule.sh
+sh 003-cosmic/createModule.sh        # or other desktop
+sh 05-devel/createModule.sh          # optional
+sh 08-multilanguage/createModule.sh  # optional
+sh 0050-multilib-lite/createModule.sh # optional
+```
 
-All modules will be output to `/tmp/skycair-builder-[version]/`.
+Output: `/tmp/skycair-builder-<version>/`
+
+Build an ISO:
+```bash
+sh iso/skycair/create-iso.sh /tmp/skycair.iso
+```
+
+---
+
+## Module System
+
+SkyCAIR uses `.xzm` squashfs modules stacked via overlayfs at boot:
+
+```
+/skycair/base/      ← core modules (auto-loaded)
+/skycair/modules/   ← optional modules (auto-loaded)
+```
+
+To activate a module in a live session:
+```bash
+activate mymodule.xzm
+```
+
+Module signing (ed25519):
+```bash
+openssl pkeyutl -sign -inkey signing.key -in mymodule.xzm -out mymodule.xzm.sig
+```
+
+---
+
+## Repository Structure
+
+```
+.
+├── 000-kernel/        ← Kernel build
+├── 001-core/          ← Core Slackware packages
+├── 002-gui/           ← GUI base (Wayland, graphics drivers)
+├── 002-xtra/          ← Extra utilities (mpv, transmission)
+├── 003-cosmic/        ← COSMIC desktop environment
+├── 003-*/             ← Other desktop environments
+├── 0050-multilib-lite/ ← 32-bit compatibility
+├── 05-devel/          ← Development tools
+├── 08-multilanguage/  ← Language packs
+├── common/            ← Shared packages (fonts, LightDM)
+├── iso/               ← Boot media structure & scripts
+├── skycair-app-store/ ← App Store source
+├── nvidia-driver/     ← NVIDIA driver module
+└── builder-utils/     ← Build helper scripts
+```
 
 ---
 
 ## Upstream
 
-This project is a customization branch of [porteux/porteux](https://github.com/porteux/porteux).
-Upstream is maintained independently — pull upstream updates into `main`, then rebase the `skycair-2.6-cosmic` branch as needed.
+Based on [porteux/porteux](https://github.com/porteux/porteux) v2.6.
+Upstream changes merge into `main`; SkyCAIR customizations live on `skycair-2.6-cosmic`.
+
+```bash
+# Sync upstream
+git fetch upstream
+git checkout main
+git merge upstream/main
+
+# Rebase SkyCAIR branch
+git checkout skycair-2.6-cosmic
+git rebase main
+```
+
+---
+
+## Contributing & Security
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to contribute
+- [SECURITY.md](SECURITY.md) — report vulnerabilities
+- [LICENSE](LICENSE) — source available license
+
+---
+
+*SkyCAIR OS — Care About AI Readiness — EOD (End of Days Edition)*
+*© 2026 2XR, LLC | Evolve2Linux | 123Tech.net*

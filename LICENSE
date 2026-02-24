@@ -1,0 +1,43 @@
+SkyCAIR OS — Source Available License
+Copyright (c) 2026 2XR, LLC | Evolve2Linux | 123Tech.net
+All Rights Reserved.
+
+CONTACT
+  SkyCAIR@123Tech.net | (608) 454-6660
+  855 Community Dr, Sauk City, WI 53583
+  https://123tech.net
+
+DEFINITIONS
+  "Software" means the SkyCAIR OS build scripts, configuration files,
+  module definitions, and associated documentation in this repository.
+  "Commercial Use" means use in a product or service offered for sale
+  or used in a revenue-generating capacity.
+
+PERMISSIONS
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this Software, to:
+    - View, study, and fork this Software for personal, educational,
+      and non-commercial purposes.
+    - Submit contributions (pull requests, issues) under the terms of
+      the CONTRIBUTING guidelines.
+    - Build and run the Software for personal use.
+
+RESTRICTIONS
+  Without a separate written commercial license from 2XR, LLC, you may NOT:
+    - Distribute compiled ISOs, modules, or binaries derived from this
+      Software for commercial purposes.
+    - Use this Software as part of a commercial product or service.
+    - Remove or alter this license notice or copyright attribution.
+    - Sub-license this Software.
+
+UPSTREAM COMPONENTS
+  This Software is based on PorteuX (https://github.com/porteux/porteux)
+  and incorporates components from Slackware Linux. Those components are
+  subject to their own respective licenses.
+
+DISCLAIMER
+  THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED. IN NO EVENT SHALL 2XR, LLC BE LIABLE FOR ANY
+  CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM USE OF THIS SOFTWARE.
+
+For commercial licensing inquiries: SkyCAIR@123Tech.net

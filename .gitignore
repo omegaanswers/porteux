@@ -1,0 +1,46 @@
+# SkyCAIR OS — .gitignore
+
+# Build output modules (large squashfs files)
+# Exceptions for pre-built modules intentionally committed:
+*.xzm
+!common/notoserifcjk-regular.xzm
+!nvidia-driver/009-blacklist.xzm
+
+# Rust/Cargo build artifacts (from COSMIC component builds)
+target/
+.cargo/
+
+# ISO output files
+*.iso
+
+# Temporary build directories
+/tmp/
+
+# Slackware package lock files
+*.lock
+
+# Editor and OS files
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.orig
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Log files
+*.log
+
+# Secrets — never commit these
+*.pem
+*.key
+id_rsa
+id_ed25519
+*.p12
+.env
+.env.*
