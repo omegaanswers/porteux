@@ -29,4 +29,4 @@ cmake -B build -S . \
 make -C build -j${NUMBERTHREADS} DESTDIR="$PKG" install
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/${PRGNAM}-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/${PRGNAM}-$VERSION-$ARCH-1_skycair.txz

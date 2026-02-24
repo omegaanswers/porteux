@@ -1,40 +1,40 @@
-Cheatcodes for PorteuX
+Cheatcodes for SkyCAIR
 =======================================
 
-Cheatcodes are boot parameters unique to PorteuX that are used to
+Cheatcodes are boot parameters unique to SkyCAIR that are used to
 affect the boot process. You can use these parameters to enable/disable
-or modify specific features, start PorteuX from a specific location,
+or modify specific features, start SkyCAIR from a specific location,
 load additional modules, etc.
 
 To add one or more cheatcodes during boot time, reboot your computer
-and wait until the PorteuX logo appears, then press Escape, choose
+and wait until the SkyCAIR logo appears, then press Escape, choose
 your desired menu entry and press Tab to edit the command line. Add
 the desired cheatcode from the list in the next section of this document.
 
 If you want to save a cheatcode so it loads automatically each time
-you boot PorteuX, you can edit one of the porteux.cfg files. For
+you boot SkyCAIR, you can edit one of the skycair.cfg files. For
 cheatcodes related to the boot profile (e.g. Graphics Mode, Always Fresh,
-etc), like 'changes=', edit '/boot/syslinux/porteux.cfg' and add
+etc), like 'changes=', edit '/boot/syslinux/skycair.cfg' and add
 them at the end of the 'APPEND' line in the desired boot profile section.
 For cheatcodes that will apply to all boot profiles,
-'/porteux/porteux.cfg' can be more convenient.
+'/skycair/skycair.cfg' can be more convenient.
 
 Here's an example for adding the 'noauto' and 'volume=30' cheatcodes to
-'Graphics Mode' boot profile in '/boot/syslinux/porteux.cfg' (that has
+'Graphics Mode' boot profile in '/boot/syslinux/skycair.cfg' (that has
 another cheatcode by default):
 
-APPEND changes=EXIT:/porteux noauto volume=30
+APPEND changes=EXIT:/skycair noauto volume=30
 
 NOTE: the following cheatcodes will be ignored when placed in
-'/porteux/porteux.cfg' because they affect how PorteuX storage
+'/skycair/skycair.cfg' because they affect how SkyCAIR storage
 media is detected and mounted: 'cfgfile=', 'delay=', 'from=',
 'mopt=', 'fsck'.
 
-NOTE: for all other cheatcodes that appear in multiple places, PorteuX
+NOTE: for all other cheatcodes that appear in multiple places, SkyCAIR
 uses the following priority list (from higher to lower):
-1. /porteux/porteux.cfg
+1. /skycair/skycair.cfg
 2. manual boot command line edit
-3. /boot/syslinux/porteux.cfg
+3. /boot/syslinux/skycair.cfg
 
 NOTE: cheatcodes are sometimes listed in the next section in single
 quotes (e.g. 'example=value') for clarity in the documentation.
@@ -51,21 +51,21 @@ List of available cheatcodes in alphabetical order:
 baseonly
 
    ... Prevent the system from loading any modules at startup other
-       than default ones found in '/porteux/base'. This is useful in
+       than default ones found in '/skycair/base'. This is useful in
        debugging to see if problems you are having are associated with
        a module you've added to the system.
 
 cfgfile=file.cfg
 
-   ... Specify the configuration file that PorteuX will search for.
-       This is useful when you want to store several PorteuX editions
+   ... Specify the configuration file that SkyCAIR will search for.
+       This is useful when you want to store several SkyCAIR editions
        on the same boot media.
 
        Example:
-       cfgfile=porteux-usb.cfg
+       cfgfile=skycair-usb.cfg
        
-       NOTE: this cheatcode is ignored if set in '/porteux/porteux.cfg'
-       because it affects how PorteuX storage media is detected and
+       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       because it affects how SkyCAIR storage media is detected and
        mounted.
 
 changes=/path
@@ -78,14 +78,14 @@ changes=/path
        
        Examples:
        changes=/mnt/sdb2
-       changes=/porteux/file.dat
-       changes=/porteux/my_changes
+       changes=/skycair/file.dat
+       changes=/skycair/my_changes
        
        If you use a file image instead of a device, and the image
-       contains a valid filesystem, PorteuX will mount it on a loop
+       contains a valid filesystem, SkyCAIR will mount it on a loop
        device and will store changes to it.
        
-       If you use a directory, PorteuX will save changes to it (it
+       If you use a directory, SkyCAIR will save changes to it (it
        will make a 'changes' subdirectory there). This should only
        be used for linux filesystems, if changes need to be saved
        to a FAT or NTFS partition, a savefile container has to be used.
@@ -96,10 +96,10 @@ changes=/path
 
        Examples:
        changes=EXIT:/mnt/sdb2
-       changes=EXIT:/porteux/file.dat
-       changes=EXIT:/porteux/my_changes
+       changes=EXIT:/skycair/file.dat
+       changes=EXIT:/skycair/my_changes
 
-       By using 'changes=EXIT:' all changes made in PorteuX are kept in
+       By using 'changes=EXIT:' all changes made in SkyCAIR are kept in
        memory until you reboot/shutdown. Your RAM works as a buffer
        which gets dumped into the specified path only when the
        session is finished.
@@ -116,7 +116,7 @@ changes=/path
        NOTE: this is the default option in the ISOs.
 
        NOTE: while running a session with 'changes=EXIT:' you can
-       use the '/opt/porteux-scripts/dump-session' command to
+       use the '/opt/skycair-scripts/dump-session' command to
        move all of your changes from RAM to your storage media,
        reducing the risk of data loss and freeing up your RAM.
 
@@ -153,8 +153,8 @@ cliexec=my_script
 copy2ram
 
    ... Copy all modules to RAM. You'll need at least 1.5 GB of RAM
-       to boot PorteuX properly. Copy2ram slows down the boot phase
-       a bit but speeds up the PorteuX experience.
+       to boot SkyCAIR properly. Copy2ram slows down the boot phase
+       a bit but speeds up the SkyCAIR experience.
 
        NOTE: You can use 'rammod' cheatcode to selectively load
        modules to RAM - see the 'rammod' description below.
@@ -163,33 +163,33 @@ delay=value
 
    ... To be used for devices which need extra time to settle.
        
-       Example (to delay 5 seconds before PorteuX starts the boot
+       Example (to delay 5 seconds before SkyCAIR starts the boot
        process):
        delay=5
        
-       NOTE: this cheatcode is ignored if set in '/porteux/porteux.cfg'
+       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
        because it's also used to delay the filesystem check ('fsck'),
        and this check requires partitions to be unmounted.
 
 extramod=/path
 
    ... Let you load modules from one or more external folders located
-       outside the '/porteux' directory. Multiple folders can be specified,
+       outside the '/skycair' directory. Multiple folders can be specified,
        with full paths separated by a semicolon without any spaces.
 
        Examples:
-       extramod=/mnt/sdb3/porteux-modules
-       extramod=/mnt/sdb3/porteux-modules;/mnt/sdc4/inkscape_modules
+       extramod=/mnt/sdb3/skycair-modules
+       extramod=/mnt/sdb3/skycair-modules;/mnt/sdc4/inkscape_modules
 
 from=/path
 
-   ... Load PorteuX from the specified partition, folder or ISO file.
+   ... Load SkyCAIR from the specified partition, folder or ISO file.
 
        NOTE: if a destination partition is not provided with this
        cheatcode, the booting script will search through all
        available devices for your data.
 
-       Example (to load unpacked PorteuX ISO from the second
+       Example (to load unpacked SkyCAIR ISO from the second
        partition on your second drive):
        from=/mnt/sdb2
        
@@ -197,11 +197,11 @@ from=/path
        placed on the second partition):
        from=/mnt/sda2/linux-testing
        
-       Example (to load the PorteuX data from 'porteux-test.iso'):
-       from=/mnt/sda1/porteux-test.iso
+       Example (to load the SkyCAIR data from 'skycair-test.iso'):
+       from=/mnt/sda1/skycair-test.iso
        
-       NOTE: this cheatcode is ignored if set in '/porteux/porteux.cfg'
-       because it affects how PorteuX storage media is detected and
+       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       because it affects how SkyCAIR storage media is detected and
        mounted.
 
 fsck
@@ -214,8 +214,8 @@ fsck
        NOTE: on some systems, you will need to use the 'delay='
        cheatcode in order to allow your devices to settle.
 
-       NOTE: this cheatcode is ignored if set in '/porteux/porteux.cfg'
-       because it affects how PorteuX storage media is detected and
+       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       because it affects how SkyCAIR storage media is detected and
        mounted.
 
 fscknolog
@@ -262,7 +262,7 @@ kmap=keyboardmap
 
 load=module
 
-   ... Load optional modules from '/porteux/optional' directory on the
+   ... Load optional modules from '/skycair/optional' directory on the
        boot media that contain the strings specified. Additional modules
        can be listed, separated by semicolons without spaces.
 
@@ -282,15 +282,15 @@ login=username
 mopt
 
    ... Allow you to customize your filesystem  mount options. By default,
-       the mount options for all filesystems in PorteuX are:
+       the mount options for all filesystems in SkyCAIR are:
        'noatime,nodiratime,suid,dev,exec,async'. Each option must be
        separated by commas (',') with no spaces between any character.
 
        Example:
        mopt=realtime,sync,users,nosuid,noexec
        
-       NOTE: this cheatcode is ignored if set in '/porteux/porteux.cfg'
-       because it affects how PorteuX storage media is detected and
+       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       because it affects how SkyCAIR storage media is detected and
        mounted.
 
 noauto
@@ -323,8 +323,8 @@ nohotplug
 noload=module
 
    ... Disable loading of any modules with a name containing the text
-       specified. This affects all the modules on the PorteuX booting
-       media, including '/porteux/base' and '/porteux/modules' folders.
+       specified. This affects all the modules on the SkyCAIR booting
+       media, including '/skycair/base' and '/skycair/modules' folders.
        It's useful with the 'copy2ram' cheatcode because any unused module
        is not copied to RAM. Multiple modules can be listed, but they must
        be separated by semicolons, with no spaces.
@@ -338,7 +338,7 @@ nologin
 
 nonetwork
 
-   ... Prevent PorteuX from automatically establishing a network
+   ... Prevent SkyCAIR from automatically establishing a network
        connection on startup.
 
        Note that this cheatcode makes system modifications that must
@@ -353,21 +353,21 @@ nonetwork
 norootcopy
 
    ... Do not copy files from your rootcopy directory at boot-up.
-       Useful if something has gone wrong with your PorteuX configuration
+       Useful if something has gone wrong with your SkyCAIR configuration
        and you want to boot without loading any file from rootcopy.
 
 noswap
 
    ... Prevent the automatic use of an existing swap partition.
-       By default, PorteuX searches your attached drives for
+       By default, SkyCAIR searches your attached drives for
        partitions that are formatted as swap, and will mount them
-       for use within PorteuX. This 'noswap' cheatcode disables
+       for use within SkyCAIR. This 'noswap' cheatcode disables
        this behavior.
 
 noupdateclock
 
    ... Prevent the automatic update of the hardware clock during
-       boot time. By default, PorteuX updates the hardware clock
+       boot time. By default, SkyCAIR updates the hardware clock
        from the internet during boot time if a timezone is specified.
        This 'noupdateclock' cheatcode disables this behavior.
 
@@ -389,32 +389,32 @@ rammod=module
        modules you use the most, without occupying your RAM with those
        modules that you make use of less often. Any modules that are
        not specified will be mounted in place on the block device, so
-       your device will remain mounted while PorteuX is running.
+       your device will remain mounted while SkyCAIR is running.
 
        You can use full or partial names for your search string,
        but keep in mind that all modules and folders that match your
        string will be loaded into RAM; if you have extra modules in a
        folder named 'lxde' and you use 'rammod=lxde', then the module
-       003-lxde.xzm from '/porteux/base' will be loaded as well as in
+       003-lxde.xzm from '/skycair/base' will be loaded as well as in
        the 'lxde' folder.
 
        NOTE: 'rammod' cannot be used without 'copy2ram', and it also
-       will not load modules from '/porteux/optional' or external
+       will not load modules from '/skycair/optional' or external
        locations unless you also specify these modules with the
        'load=' or 'extramod=' cheatcodes.
 
        Examples:
        rammod=001;002;004;firefox
-       extramod=/mnt/sdb3/porteux/gimp rammod=001;002;gimp
+       extramod=/mnt/sdb3/skycair/gimp rammod=001;002;gimp
 
 rootcopy=/path
 
    ... Copy files from the specified directory directly to the live
        filesystem. This directory will be used instead of the
-       traditional '/porteux/rootcopy'.
+       traditional '/skycair/rootcopy'.
 
        Example:
-       rootcopy=/mnt/sda5/porteux-files
+       rootcopy=/mnt/sda5/skycair-files
 
 rootmount
 
@@ -445,11 +445,11 @@ vgadetect
    ... Automatically detects NVIDIA video cards and loads the
        proprietary driver at startup. You must have a module
        containing the appropriate graphics driver stored in your
-       '/porteux/optional/' directory. The driver module is available in
-       the PorteuX App Store. If you want to compile your own driver,
+       '/skycair/optional/' directory. The driver module is available in
+       the SkyCAIR App Store. If you want to compile your own driver,
        please note that the module's name must contain nvidia-[number],
        where [number] is the number of the driver version. For example:
-       '08-nvidia-560.35.03-k.6.11.4-porteux-x86_64.xzm'.
+       '08-nvidia-560.35.03-k.6.11.4-skycair-x86_64.xzm'.
 
 volume=value
 

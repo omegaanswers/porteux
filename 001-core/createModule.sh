@@ -197,7 +197,7 @@ rm -fr $MODULEPATH/${currentPackage}
 cd $MODULEPATH/packages && ROOT=./ installpkg *.t?z
 rm *.t?z
 
-### install additional packages, including porteux utils
+### install additional packages, including skycair utils
 
 InstallAdditionalPackages
 
@@ -257,14 +257,14 @@ cp -s libxml2.so libxml2.so.2 > /dev/null 2>&1
 
 ### update version
 
-echo "PorteuX-v${PORTEUXVERSION}-${PORTEUXBUILD}" > $MODULEPATH/packages/etc/porteux-version
-sed -i "s|version|v${PORTEUXVERSION}|" $MODULEPATH/packages/etc/issue
-sed -i "s|version|v${PORTEUXVERSION}|" $MODULEPATH/packages/etc/issue-openbox
-sed -i "s|^VERSION=.*|VERSION=\"${PORTEUXVERSION}\"|" $MODULEPATH/packages/etc/os-release
-sed -i "s|^VERSION_ID=.*|VERSION_ID=${PORTEUXVERSION}|" $MODULEPATH/packages/etc/os-release
-sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"PorteuX ${PORTEUXVERSION} ${PORTEUXBUILD}\"|" $MODULEPATH/packages/etc/os-release
-sed -i "s|^CPE_NAME=.*|CPE_NAME=\"cpe:/o:porteux:porteux_linux:${PORTEUXVERSION}\"|" $MODULEPATH/packages/etc/os-release
-sed -i "0,/PorteuX/s|PorteuX.*|PorteuX v${PORTEUXVERSION}|" $SCRIPTPATH/../iso/boot/syslinux/help.txt
+echo "SkyCAIR-v${SKYCAIRVERSION}-${SKYCAIRBUILD}" > $MODULEPATH/packages/etc/skycair-version
+sed -i "s|version|v${SKYCAIRVERSION}|" $MODULEPATH/packages/etc/issue
+sed -i "s|version|v${SKYCAIRVERSION}|" $MODULEPATH/packages/etc/issue-openbox
+sed -i "s|^VERSION=.*|VERSION=\"${SKYCAIRVERSION}\"|" $MODULEPATH/packages/etc/os-release
+sed -i "s|^VERSION_ID=.*|VERSION_ID=${SKYCAIRVERSION}|" $MODULEPATH/packages/etc/os-release
+sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"SkyCAIR ${SKYCAIRVERSION} ${SKYCAIRBUILD}\"|" $MODULEPATH/packages/etc/os-release
+sed -i "s|^CPE_NAME=.*|CPE_NAME=\"cpe:/o:skycair:skycair_linux:${SKYCAIRVERSION}\"|" $MODULEPATH/packages/etc/os-release
+sed -i "0,/SkyCAIR/s|SkyCAIR.*|SkyCAIR v${SKYCAIRVERSION}|" $SCRIPTPATH/../iso/boot/syslinux/help.txt
 
 ### set permissions
 

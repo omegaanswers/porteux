@@ -40,4 +40,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/${PRGNAM}4-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/${PRGNAM}4-$VERSION-$ARCH-1_skycair.txz

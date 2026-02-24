@@ -1,118 +1,91 @@
-## Downloading The Latest Version
+## SkyCAIR Lite
 
-Latest release direct link: https://github.com/porteux/porteux/releases/latest
+SkyCAIR Lite is a high-performance, modular, minimalist Linux distribution built on Slackware by **2XR, LLC | Evolve2Linux | 123Tech.net**.
+
+- Contact: SkyCAIR@123Tech.net | (608) 454-6660
+- Address: 855 Community Dr, Sauk City, WI 53583
+- Product Page: https://123tech.net
+
+SkyCAIR customizations: https://github.com/omegaanswers/porteux/tree/skycair-2.6-cosmic
+
+---
 
 ## About
 
-PorteuX is a Linux distro based on Slackware, inspired by Slax and Porteus and available to the public for free. Its main goal is to be super fast, small, portable, modular and immutable (if the user wants so).
+SkyCAIR Lite is a high-performance, modular, Slackware-based Linux distribution. Its main goal is to be super fast, small, portable, modular, and immutable (if the user wants so).
 
-It's unique in many ways; not just a repackaging of programs on top of Slackware. For a list of its highlights, access the [Main Features](https://github.com/porteux/porteux/wiki/Main-Features) wiki page.
+It's already pre-configured for basic usage, including lightweight applications for each of the 8 desktop environments available. No browser is included by default, but the SkyCAIR App Store provides the most popular browsers, Steam, VirtualBox, NVIDIA drivers, Wine, office suite, multilib (32-bit compatibility), messengers, emulators, and more.
 
-It's already pre-configured for basic usage, including lightweight applications for each of the 8 desktop environments available. No browser is included, but an app store is provided so you can download the most popular browsers, as well as Steam, VirtualBox, NVIDIA drivers, Wine, office suite, multilib (32-bit compatibility), messengers, emulators, etc.
+Out of the box, SkyCAIR Lite can open basically any multimedia file. Hardware acceleration is enabled by default for machines with Intel, AMD, or NVIDIA cards (for NVIDIA cards, download the driver from the App Store).
 
-Out of the box, PorteuX can open basically any multimedia file. Hardware acceleration is enabled by default for machines with Intel, AMD or NVIDIA cards (for NVIDIA cards it's required to download the driver from the app store).
+---
 
 ## How To Use
 
-PorteuX is based on Slackware 64-bit current/rolling (bleeding edge). The ISOs are available in 8 spins: <br />
-. Cinnamon<br />
-. COSMIC<br />
-. GNOME<br />
-. KDE<br />
-. LXDE<br />
-. LXQt<br />
-. MATE<br />
-. Xfce<br />
+SkyCAIR Lite is based on Slackware 64-bit current/rolling (bleeding edge). ISOs are available in 8 spins:
 
-PorteuX is a modular system so it doesn't require a normal setup/installer. You can simply copy the ISO content to your media storage and run from the `boot` folder either `porteux-installer-for-linux.run` or `porteux-installer-for-windows.exe` (depending on which system you're running) to make the unit bootable. It's that simple. Please avoid ISO installer applications like Rufus or Etcher because by default they set the bootable unit to be read-only. More details can be found in the [/boot/docs/install.txt](https://github.com/porteux/porteux/blob/main/iso/boot/docs/install.txt) file in the ISO.
+- Cinnamon
+- COSMIC
+- GNOME
+- KDE
+- LXDE
+- LXQt
+- MATE
+- Xfce
 
-To use PorteuX in a language other than English, download the multilanguage package and use the PorteuX Language Switcher application to choose the desired language.
+SkyCAIR Lite is a modular system — no traditional installer required. Copy the ISO content to your media storage and run from the `boot` folder either `skycair-installer-for-linux.run` or `skycair-installer-for-windows.exe` to make the unit bootable. Avoid ISO installer applications like Rufus or Etcher as they set the media to read-only by default. More details: [/boot/docs/install.txt](iso/boot/docs/install.txt).
 
-To read Asian characters, download and activate the [notoserifcjk-regular.xzm](https://github.com/porteux/porteux/raw/main/common/notoserifcjk-regular.xzm) module. Some PDFs may also require `poppler-data` package, via `getpkg` command.
+To use SkyCAIR Lite in a language other than English, download the multilanguage package and use the Language Switcher application.
 
-To run Windows applications inside PorteuX, you can find both Wine and Multilib Lite XZM modules in the app store. It's recommended to have these 2 modules in `/porteux/optional` and activate them only when needed.
+---
 
-## Installing new applications or packages
+## Installing New Applications
 
-To install new applications that are not in the App Store or in the Slackware repository, AppImage format is recommended. If an application is not available in AppImage, Flatpak is avaialable by default and can be used to download and install any software available in Flatpak repositories.
+To install applications not in the App Store or Slackware repository, AppImage format is recommended. Flatpak is available by default for accessing Flatpak repositories.
 
-To download a Slackware package that is not present in PorteuX and convert it to a XZM module, run the command `getpkg -m [packageName]` (e.g `getpkg -m gimp`). After the XZM module is created, double-click or call `activate [moduleName]` to activate it. It's recommended to move the module to the `porteux/modules` folder to ensure it is automatically loaded after boot.
+To download a Slackware package and convert it to an XZM module:
+```
+getpkg -m [packageName]
+```
+After the XZM module is created, double-click or run `activate [moduleName]` to activate it. Move the module to `/skycair/modules` to auto-load on boot.
 
-To build anything inside PorteuX, it's recommended to download and activate the `05-devel` XZM module, which includes compilers, git, make, headers, etc. To build a driver (e.g. VirtualBox or any physical device), also download and activate the `06-crippled-sources` XZM module.
+---
 
 ## Default Username and Password
 
-username: guest<br />
-password: guest<br />
+```
+username: guest    password: guest
+username: root     password: toor
+```
 
-username: root<br />
-password: toor<br />
+---
 
 ## Performance
 
-PorteuX is lightweight and snappy. Although it can run on old machines (as long as they support SSE4.2), it is on high-end machines that the user will experience everything PorteuX can offer in terms of performance. The ISOs are small, and memory RAM consumption is highly optimized.
+SkyCAIR Lite is lightweight and snappy. Although it runs on older machines (SSE4.2 required), high-end machines will experience full performance potential. ISOs are small and RAM consumption is highly optimized.
 
-For better performance, it's recommended to have PorteuX installed on a SSD/NVMe storage unit instead of a USB flash drive, or to select the 'Copy To RAM' option in the boot menu. The latter will result in a slower boot time, but after booting the system will run 100% in RAM, which is the fastest way possible.
+For best performance, install on SSD/NVMe rather than USB flash, or select **Copy To RAM** at boot.
 
-Boot times are really fast. LXQt, for instance, can boot in only 3 seconds:
-
-[https://youtu.be/DJd38Nch6rQ](https://youtu.be/DJd38Nch6rQ)
-
-Clear Linux, considered the fastest Linux distro, is slower than PorteuX in Geekbench 6:
-![clear-linux-40520-vs-porteux-0 9](https://github.com/porteux/porteux/assets/126424580/8ff3cb62-91a0-4171-8c05-133e75845c6b)
-
-Sources:
-[ClearLinux40520](https://browser.geekbench.com/v6/cpu/4073056)
-[PorteuX0.9](https://browser.geekbench.com/v6/cpu/4087178)
-
-All this performance benefit is achieved without providing ancient software. This means that the kernel, desktop environments and packages are usually as new as possible.
-
-## Enable OpenCL support (required by applications like DaVinci Resolve)
-
-In the terminal, run the following commands: <br />
-1. `cd $PORTDIR/modules` <br />
-2. `sudo getpkg -m libclc llvm mesa ocl-icd spirv-llvm-translator vulkan-sdk`<br />
-3. `sudo activate -q libclc*.xzm llvm*.xzm mesa*.xzm ocl-icd*.xzm spirv-llvm-translator*.xzm vulkan-sdk*.xzm` <br />
-
-This only needs to be done once, as these modules will be activated automatically every time the machine boots.
+---
 
 ## Building
 
-PorteuX can be built in a live session of Slackware 64-bit or PorteuX 64-bit. At the moment, the main scripts do not generate ISOs, but only the XZM files for each module (000-kernel, 001-core, 002-gui, 002-xtra, 003-desktop-environment, etc).
+SkyCAIR Lite can be built in a live session of Slackware 64-bit or SkyCAIR Lite 64-bit. Run `createModule.sh` as root in this order:
 
-To build PorteuX, run the `createModule.sh` script as root, in the exact folder order as described: <br />
-1. 000-kernel<br />
-2. 001-core<br />
-3. 002-gui<br />
-4. 002-xtra<br />
-5. 003-desktopenvironment (where 'desktopenvironment' is your preferred environment, like 003-lxde)<br />
-6. (optional) 05-devel<br />
-7. (optional) 08-multilanguage<br />
-8. (optional) 0050-multilib-lite<br />
+1. 000-kernel
+2. 001-core
+3. 002-gui
+4. 002-xtra
+5. 003-\<desktopenv\> (e.g. `003-cosmic`)
+6. (optional) 05-devel
+7. (optional) 08-multilanguage
+8. (optional) 0050-multilib-lite
 
-At the end, all modules will be in their respective subfolders inside /tmp/porteux-builder-[version].
+All modules will be output to `/tmp/skycair-builder-[version]/`.
 
-## Contributing
+---
 
-Feel free to report any issues or request changes. Any constructive feedback is welcome.
+## Upstream
 
-## Donate
-
-Please consider donating to the PorteuX project:
-
-https://paypal.me/porteux<br />
-https://buymeacoffee.com/porteux<br />
-
-## Thanks
-
-arleson (core team)<br />
-theUtopian (core team)<br />
-blaze (@porteus)<br />
-brokenman (@porteus)<br />
-luckyCyborg (@slackware)<br />
-nater1983 (@gfs)<br />
-ncmprhnsbl (@porteus)<br />
-neko (@porteus)<br />
-patrick volkerding (@slackware)<br />
-phantom (@porteus)<br />
-tomas matejicek (@slax)<br />
+This project is a customization branch of [porteux/porteux](https://github.com/porteux/porteux).
+Upstream is maintained independently — pull upstream updates into `main`, then rebase the `skycair-2.6-cosmic` branch as needed.

@@ -34,7 +34,7 @@ CFLAGS="$GCCFLAGS" \
 	--enable-gtk2-module=no \
 	--enable-docs=no \
 	--disable-schemas-compile \
-	--build=$ARCH-porteux-linux
+	--build=$ARCH-skycair-linux
 
 sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 make -j${NUMBERTHREADS} install-strip DESTDIR=$PKG
@@ -45,4 +45,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_skycair.txz

@@ -225,7 +225,7 @@ rm $MODULEPATH/packages/extra-cmake-modules*.txz
 cd $MODULEPATH/packages && ROOT=./ installpkg *.t?z
 rm *.t?z
 
-### install additional packages, including porteux utils
+### install additional packages, including skycair utils
 
 InstallAdditionalPackages
 
@@ -340,8 +340,8 @@ GenerateCachesDE
 
 ### kde specific mime cache
 
-rm -fr $PORTEUXBUILDERPATH/caches/mime/packages
-cp -r $PORTEUXBUILDERPATH/caches/mime $MODULEPATH/packages/usr/share/
+rm -fr $SKYCAIRBUILDERPATH/caches/mime/packages
+cp -r $SKYCAIRBUILDERPATH/caches/mime $MODULEPATH/packages/usr/share/
 
 ### finalize
 

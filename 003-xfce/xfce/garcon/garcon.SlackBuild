@@ -38,7 +38,7 @@ CFLAGS="$GCCFLAGS -ffat-lto-objects" \
 	--sysconfdir=/etc \
 	--disable-static \
 	--disable-debug \
-	--build=$ARCH-porteux-linux
+	--build=$ARCH-skycair-linux
 
 make -j${NUMBERTHREADS} install-strip DESTDIR=$PKG
 
@@ -52,4 +52,4 @@ patch -p0 < $CWD/xfce-applications.menu.patch
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_skycair.txz

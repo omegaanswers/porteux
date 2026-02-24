@@ -36,5 +36,5 @@ make -j${NUMBERTHREADS} install-strip DESTDIR=$PKG
 rm -fr $PKG/usr/bin
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_skycair.txz
 

@@ -109,7 +109,7 @@ rm $MODULEPATH/packages/libfm-extra*.txz
 cd $MODULEPATH/packages && ROOT=./ installpkg *.t?z
 rm *.t?z
 
-### install additional packages, including porteux utils
+### install additional packages, including skycair utils
 
 InstallAdditionalPackages
 

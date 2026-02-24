@@ -33,7 +33,7 @@ EndSection' >> /etc/X11/xorg.conf
 
 echo "Creating memory changes file..."
 sync; echo 3 > /proc/sys/vm/drop_caches
-tar cf $INSTALLERDIR/nvidia.tar.xz --exclude={"*/.*","*/.wh.*",".cache","dev","home","mnt","opt","root","run","tmp","var","etc/cups","etc/udev","etc/profile.d","etc/porteux","lib/firmware","lib/modules/*porteux/modules.*"} -C /mnt/live/memory changes || exit 1
+tar cf $INSTALLERDIR/nvidia.tar.xz --exclude={"*/.*","*/.wh.*",".cache","dev","home","mnt","opt","root","run","tmp","var","etc/cups","etc/udev","etc/profile.d","etc/skycair","lib/firmware","lib/modules/*skycair/modules.*"} -C /mnt/live/memory changes || exit 1
 
 echo "Extracting memory changes file..."
 tar xf $INSTALLERDIR/nvidia.tar.xz --strip 1 -C $MODULEDIR || exit 1

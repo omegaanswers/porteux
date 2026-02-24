@@ -58,7 +58,7 @@ CFLAGS="$GCCFLAGS" \
 	--without-systemd \
 	--with-elogind \
 	--disable-modern-top \
-	--build=$ARCH-porteux-linux
+	--build=$ARCH-skycair-linux
 
 make -j${NUMBERTHREADS} install DESTDIR=$PKG
 
@@ -126,7 +126,7 @@ CFLAGS="$GCCFLAGS" \
 	--localstatedir=/var \
 	--disable-silent-rules \
 	--disable-rpath \
-	--build=$ARCH-porteux-linux
+	--build=$ARCH-skycair-linux
 
 make -j${NUMBERTHREADS} install DESTDIR=$PKG
 
@@ -142,7 +142,7 @@ CXXFLAGS="$GCCFLAGS -fvisibility-inlines-hidden" \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--enable-maintainer-mode \
-	--build=$ARCH-porteux-linux
+	--build=$ARCH-skycair-linux
 
 make -j${NUMBERTHREADS} install DESTDIR=$PKG
 
@@ -152,4 +152,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-${VERSION}-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-${VERSION}-$ARCH-1_skycair.txz

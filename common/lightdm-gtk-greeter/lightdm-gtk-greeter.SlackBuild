@@ -28,7 +28,7 @@ if ! which xdt-csource > /dev/null 2>&1; then
 		--sysconfdir=/etc \
 		--disable-static \
 		--disable-debug \
-		--build=$ARCH-porteux-linux
+		--build=$ARCH-skycair-linux
 
 	make -j${NUMBERTHREADS} install
 
@@ -63,4 +63,4 @@ install -Dm644 "$CWD/lightdm-gtk-greeter.conf" $PKG/etc/lightdm/
 sed -i "s|ICONTHEMETEMPLATE|$ICONTHEME|g" $PKG/etc/lightdm/lightdm-gtk-greeter.conf
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_skycair.txz

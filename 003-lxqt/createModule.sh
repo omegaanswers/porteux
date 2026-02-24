@@ -217,7 +217,7 @@ rm $MODULEPATH/packages/plasma-wayland-protocols*.txz
 cd $MODULEPATH/packages && ROOT=./ installpkg *.t?z
 rm *.t?z
 
-### install additional packages, including porteux utils
+### install additional packages, including skycair utils
 
 InstallAdditionalPackages
 
@@ -268,7 +268,7 @@ rm -fr usr/share/screengrab/translations
 rm -fr usr/share/Thunar
 
 find usr/share/lxqt/wallpapers -mindepth 1 -maxdepth 1 ! \( -name "simple_blue_widescreen*" \) -exec rm -rf '{}' \; 2>/dev/null
-find usr/share/lxqt/themes -mindepth 1 -maxdepth 1 ! \( -name "Porteux-dark" -o -name "Clearlooks" \) -exec rm -rf '{}' \; 2>/dev/null
+find usr/share/lxqt/themes -mindepth 1 -maxdepth 1 ! \( -name "SkyCAIR-dark" -o -name "Clearlooks" \) -exec rm -rf '{}' \; 2>/dev/null
 
 [ "$SYSTEMBITS" == 64 ] && find usr/lib/ -mindepth 1 -maxdepth 1 ! \( -name "python*" \) -exec rm -rf '{}' \; 2>/dev/null
 } >/dev/null 2>&1

@@ -42,7 +42,7 @@ if [ -f autogen.sh ]; then
 		--disable-static \
 		--disable-debug \
 		--enable-wayland \
-		--build=$ARCH-porteux-linux
+		--build=$ARCH-skycair-linux
 
 	make -j${NUMBERTHREADS} install-strip DESTDIR=$PKG
 else
@@ -72,4 +72,4 @@ mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-$ARCH-1_skycair.txz

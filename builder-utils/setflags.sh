@@ -14,21 +14,21 @@ SetFlags() {
 	
 	current_folder=$(dirname "$(realpath "$0")")
 	git config --global --add safe.directory "${current_folder}"/.. 2>/dev/null
-	export PORTEUXVERSION=$(git -C "${current_folder}"/.. branch --show-current)
-	[ ! $PORTEUXVERSION ] && PORTEUXVERSION=$(date -r . +%Y%m%d)
+	export SKYCAIRVERSION=$(git -C "${current_folder}"/.. branch --show-current)
+	[ ! $SKYCAIRVERSION ] && SKYCAIRVERSION=$(date -r . +%Y%m%d)
 	slackware_full_version=$(cat /etc/slackware-version)
 	slackware_version=${slackware_full_version//* }
 
 	if [[ $slackware_version == *"+" ]]; then
 		export SLACKWAREVERSION=current
-		export PORTEUXBUILD=current		
+		export SKYCAIRBUILD=current		
 	else
-		echo "Fatal error: PorteuX can only be built in Slackware current environment." && exit 1
+		echo "Fatal error: SkyCAIR can only be built in Slackware current environment." && exit 1
 	fi
 
 	export SCRIPTPATH="$PWD"
-	export PORTEUXBUILDERPATH="/tmp/porteux-builder-$PORTEUXVERSION"
-	export MODULEPATH="$PORTEUXBUILDERPATH/$MODULENAME"
+	export SKYCAIRBUILDERPATH="/tmp/skycair-builder-$SKYCAIRVERSION"
+	export MODULEPATH="$SKYCAIRBUILDERPATH/$MODULENAME"
 	export BUILDERUTILSPATH="$SCRIPTPATH/../builder-utils"
 
 	export ARCH=$(uname -m)

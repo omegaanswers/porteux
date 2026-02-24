@@ -26,4 +26,4 @@ make -j${NUMBERTHREADS}
 make install DESTDIR=$MODULEPATH/$PRGNAM/package
 
 cd $MODULEPATH/$PRGNAM/package
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-${ARCH}-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-${ARCH}-1_skycair.txz

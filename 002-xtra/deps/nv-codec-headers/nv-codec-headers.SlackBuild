@@ -23,4 +23,4 @@ cd ${PRGNAM}-$VERSION
 make -j${NUMBERTHREADS} PREFIX=/usr LIBDIR=/lib${SYSTEMBITS} DESTDIR=$PKG install
 
 cd $PKG
-makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-noarch-1_porteux.txz
+makepkg ${MAKEPKGFLAGS} $MODULEPATH/packages/$PRGNAM-$VERSION-noarch-1_skycair.txz

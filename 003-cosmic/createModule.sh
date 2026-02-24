@@ -129,7 +129,7 @@ rm -fr $MODULEPATH/just-master
 cd $MODULEPATH/packages && ROOT=./ installpkg *.t?z
 rm *.t?z
 
-### install-strip additional packages, including porteux utils
+### install-strip additional packages, including skycair utils
 
 InstallAdditionalPackages
 
