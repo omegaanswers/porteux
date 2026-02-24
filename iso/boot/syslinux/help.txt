@@ -1,29 +1,43 @@
 
- SkyCAIR v2.6
+ SkyCAIR v2.6  |  2XR, LLC | Evolve2Linux | 123Tech.net
 
- If you need to edit the boot command line, hit [Tab].
- When finished, press [Enter]. Default usernames/passwords:
- guest / guest
- root / toor
+ Press [Tab] to edit boot options. Press [Enter] to boot.
+ Default credentials:  guest / guest   |   root / toor
 
 
- -Graphics Mode-
- Run SkyCAIR the best way possible, loading the desktop
- environment and saving changes by default (if supported).
+ -Graphics Mode-  (DEFAULT)
+ Best for most users. Boots the COSMIC desktop. Changes are
+ saved to your storage device on shutdown (EXIT mode).
 
 
- -Always Fresh-
- Start a fresh session loading only the base modules and
- not saving any changes.
+ -Persistent 16GB-
+ Uses a 16GB save file (skycair/skycair-save.dat) on your
+ storage device. Run create-save-data.sh first to create it.
+ Changes are written continuously to the save file.
+
+
+ -Install to Disk-
+ Boots the desktop and launches GParted so you can prepare
+ your target partition. Then run the SkyCAIR installer from
+ the /boot folder to make the partition bootable.
 
 
  -Copy To RAM-
- Same as Graphics Mode, but copying all modules to RAM.
+ Copies all modules into RAM at boot. Requires 2GB+ RAM.
+ Slower to start but runs at maximum speed once loaded.
+ Safe to remove the boot media after startup.
 
 
- -Text Mode-
- Start in text mode, not loading the desktop environment.
+ -Always Fresh-
+ Boots clean every time with no changes saved. Useful for
+ testing or when troubleshooting issues.
 
 
- -Text Mode Fresh-
- Same as Always Fresh, but starting in text mode.
+ -Safe Mode-
+ Boots in text mode with basic drivers only. No KMS/GPU.
+ Use this if the display fails to start normally.
+
+
+ -Text Mode / Text Mode Fresh-
+ CLI only. No desktop environment is loaded.
+

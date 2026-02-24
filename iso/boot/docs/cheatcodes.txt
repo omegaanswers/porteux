@@ -1,3 +1,9 @@
+================================================
+  SkyCAIR v2.6  --  Cheatcodes Reference
+  2XR, LLC | Evolve2Linux | 123Tech.net
+  SkyCAIR@123Tech.net | (608) 454-6660
+================================================
+
 Cheatcodes for SkyCAIR
 =======================================
 
@@ -474,6 +480,62 @@ zram=value%
        Example:
        zram=33%
 
+nomodeset
+
+   ... Disable kernel mode setting (KMS) for the GPU. Use this if
+       the display fails to start, goes blank, or shows corruption
+       after the boot menu. This boots into a basic framebuffer
+       mode without GPU acceleration. You can then install the
+       correct GPU driver from the SkyCAIR App Store.
+
+       NOTE: this is pre-configured in the "Safe Mode" boot entry.
+
+quiet
+
+   ... Suppress most kernel boot messages, showing only critical
+       errors. This gives a cleaner boot experience and is enabled
+       by default in Graphics Mode and Persistent 16GB boot entries.
+       Remove it if you need to see boot messages for debugging.
+
+
+---------------------------------------
+PERSISTENT SAVE DATA -- 16 GB SAVE FILE
+---------------------------------------
+
+SkyCAIR supports a persistent save file (.dat container) that stores
+all your changes, installed apps, and personal data between reboots.
+The "Persistent 16GB" boot menu entry uses this by default.
+
+To CREATE a 16 GB save file before first use (run once as root):
+
+   Option A -- helper script:
+   sh /boot/skycair-scripts/create-save-data.sh
+
+   Option B -- manually:
+   dd if=/dev/zero of=/skycair/skycair-save.dat bs=1M count=16384
+   mkfs.ext4 -F /skycair/skycair-save.dat
+
+Common save file sizes:
+    8 GB  --  count=8192
+   16 GB  --  count=16384
+   32 GB  --  count=32768
+   64 GB  --  count=65536
+
+To use the save file, boot with:
+   changes=/skycair/skycair-save.dat
+
+To use a save file on an external or labeled partition:
+   changes=LABEL:MyDrive/skycair/skycair-save.dat
+   changes=UUID:xxxx-xxxx/skycair/skycair-save.dat
+
+To save changes immediately during a live session (without reboot):
+   /opt/skycair-scripts/dump-session
+
+NOTE: Save files (.dat) must be on a Linux filesystem (ext4 or XFS).
+      FAT and NTFS partitions cannot host .dat save files.
+      For FAT/NTFS use:  changes=EXIT:/skycair  (RAM buffer mode).
+
+---------------------------------------
 
 SPECIAL NOTE FOR USING CHEATCODES WITH 'LABEL' AND 'UUID':
 If you specify a LABEL or UUID with a cheatcode, remember that all

@@ -1,91 +1,330 @@
-~~~~~~~~~~~~~~~~~
-| Introduction: |
-~~~~~~~~~~~~~~~~~
+================================================
+  SkyCAIR v2.6  --  Installation & Setup Guide
+  2XR, LLC | Evolve2Linux | 123Tech.net
+  SkyCAIR@123Tech.net | (608) 454-6660
+  855 Community Dr, Sauk City, WI 53583
+================================================
 
-SkyCAIR can be installed to any media storage (including USB flash drive)
-without requiring your personal data to be erased. Partitions supported:
-ext2, ext3, ext4, FAT, exFAT, NTFS and XFS.
+SkyCAIR is a modular Live OS. It runs directly from USB,
+SSD, NVMe, or any storage without erasing your existing data.
+It can also be permanently installed to a partition.
 
-The simplest way to do that is copying the ISO content to your media
-storage and running the installer, which will make the media bootable
-(instructions below) and will set the correct permissions, not touching
-or removing your existing data. Just make sure your partition is of type
-'msdos' or 'gpt'.
+Supported filesystems: ext2, ext3, ext4, FAT, exFAT, NTFS, XFS
+Required CPU: SSE4.2 or newer (Intel/AMD from ~2010+)
+Minimum RAM: 1 GB  (2 GB recommended for Copy To RAM mode)
 
-For better performance, it's recommended to install SkyCAIR on an SSD or
-NVMe storage unit rather than a USB flash drive. Alternatively, you can
-select 'Copy to RAM' option in the boot menu. While this will increase
-RAM usage and may result in a slightly slower boot time, once the system
-is up and running, it will perform at its fastest, as it will be running
-100% in RAM.
+NOTE: Do NOT use Rufus, Etcher, or Balena to write this ISO.
+They make the media read-only and break the save system.
+Use skycair-installer-for-linux.run or
+skycair-installer-for-windows.exe instead.
 
-Please notice that a CPU with SSE4.2 is required to run SkyCAIR.
 
-It's not recommended to use any third-party ISO installer application,
-such as Rufus or Etcher because the media storage is usually set to
-read-only mode, making it impossible to write any data, including
-automatic save changes.
+================================================
+  STEP 1 -- CHOOSE YOUR STORAGE
+================================================
 
-First you need to choose between EFI or legacy boot process. Although
-legacy is easier to set as it requires less steps, it's not supported
-by all modern system. If you're in doubt, choose EFI.
+Best performance:  SSD or NVMe (internal or external)
+Portability:       USB 3.0 drive (8 GB minimum)
+Testing:           Any partition with free space
 
-~~~~~~~~~~~~~~~
-| EFI System: |
-~~~~~~~~~~~~~~~
+SkyCAIR will not erase existing data. It only adds
+/boot, /EFI, and /skycair folders to your storage.
 
-1) Make sure the first partition is of type FAT32.
-2) Copy '/boot' and '/EFI' folders onto the FAT32 partition.
-3) The second partition can be either this FAT32 one or any of the
-supported ones, and it will contain '/skycair' folder.
 
-~~~~~~~~~~~~~~~~~~
-| Legacy System: |
-~~~~~~~~~~~~~~~~~~
+================================================
+  STEP 2 -- COPY FILES TO YOUR STORAGE
+================================================
 
-1) Copy '/boot' and '/skycair' folders onto the desired partition.
+EFI Systems (modern hardware -- recommended):
+  1. Ensure the first partition is FAT32
+  2. Copy /boot and /EFI folders to the FAT32 partition
+  3. Copy /skycair to FAT32 or to a second partition
 
------
+Legacy/BIOS Systems:
+  1. Copy /boot and /skycair to your desired partition
 
-After completing the steps above, continue to the ones below
-depending on the system you're setting the media storage.
+Then continue to Step 3.
 
-~~~~~~~~~~~~~~~~~
-| From Windows: |
-~~~~~~~~~~~~~~~~~
 
-1) Navigate into '/boot' folder that you have just copied.
-2) Run 'skycair-installer-for-windows.exe' and follow the instructions. 
+================================================
+  STEP 3 -- RUN THE INSTALLER
+================================================
 
-~~~~~~~~~~~~~~~
-| From Linux: |
-~~~~~~~~~~~~~~~
+From Windows:
+  1. Open the /boot folder you just copied
+  2. Run: skycair-installer-for-windows.exe
+  3. Follow the prompts
 
-1) Make sure the system has zstd installed.
-2) Navigate into '/boot' folder that you have just copied.
-3) From the terminal, run 'sh skycair-installer-for-linux.run' and follow
-the instructions.
+From Linux:
+  1. Ensure zstd is installed on your system
+  2. Open a terminal in the /boot folder
+  3. Run: sh skycair-installer-for-linux.run
+  4. Follow the prompts
 
-~~~~~~~~~~~~~~~
-| Conclusion: |
-~~~~~~~~~~~~~~~
+Reboot and select your storage device in BIOS/UEFI.
 
-After running the installation program, you should be able to boot SkyCAIR
-from your media storage. Reboot your computer and ensure that your BIOS
-is set to boot from the media storage where '/boot' and '/EFI' have been
-copied.
 
-~~~~~~~~~~
-| Notes: |
-~~~~~~~~~~
+================================================
+  STEP 4 -- BOOT MENU OPTIONS
+================================================
 
-1) If your media storage is formatted with a Linux filesystem (e.g. EXT4
-or XFS), make sure that '/skycair' folder is owned by your current
-user (e.g., 'guest') before the first boot. Otherwise, changes will not be
-automatically saved.
+  Graphics Mode       Default. COSMIC desktop. Changes saved
+                      to storage on shutdown (EXIT mode).
 
-2) If your media storage is formatted with a Windows filesystem (e.g. FAT
-or NTFS), changes you make to your system will not be automatically saved.
-In this case, you can create a '.dat' file container or a module using the
-SkyCAIR Save Session application after booting, or use the
-'/skycair/rootcopy' folder to save only what you need (cleaner and faster).
+  Persistent 16GB     Saves ALL changes in real time to a
+                      16 GB file on your storage device.
+                      See "Save Data" section below.
+
+  Install to Disk     Boots the desktop and opens GParted
+                      so you can prepare a target partition,
+                      then run the installer.
+
+  Copy To RAM         Loads all modules into RAM at boot.
+                      Fastest mode. Requires 2 GB+ RAM.
+                      Storage can be removed after startup.
+
+  Always Fresh        No changes saved. Clean every boot.
+                      Good for testing.
+
+  Safe Mode           Basic drivers only, no KMS/GPU.
+                      Use if the display fails to start.
+
+  Text Mode           CLI only, no desktop loaded.
+
+Default login:  guest / guest
+Root login:     root / toor
+
+
+================================================
+  SAVE DATA -- PERSISTENT 16 GB SAVE FILE
+================================================
+
+The Persistent 16GB boot option uses a file called
+skycair-save.dat stored in your /skycair folder.
+Everything you install, configure, or create is saved
+inside it and survives reboots.
+
+To CREATE the 16 GB save file (run once as root):
+
+  Option A -- Use the helper script:
+    sh /boot/skycair-scripts/create-save-data.sh
+
+  Option B -- Manually:
+    dd if=/dev/zero of=/skycair/skycair-save.dat bs=1M count=16384
+    mkfs.ext4 -F /skycair/skycair-save.dat
+
+After creating it, select "Persistent 16GB" at boot.
+
+Custom sizes (change count):
+    8 GB  = count=8192
+    16 GB = count=16384  (default)
+    32 GB = count=32768
+    64 GB = count=65536
+
+Custom location -- add this cheatcode at boot:
+    changes=/path/to/yourfile.dat
+
+NOTE: Save files require a Linux filesystem (ext4 or XFS).
+FAT and NTFS partitions cannot host .dat save files.
+
+
+================================================
+  INSTALLING TO A PERMANENT PARTITION
+================================================
+
+  1. Boot "Install to Disk" -- GParted opens automatically
+  2. Use GParted to create/format your target partition
+     (ext4 recommended, 20 GB minimum, 60 GB+ ideal)
+  3. Note your partition (e.g. /dev/sda2 or /dev/nvme0n1p2)
+  4. Mount it and copy /boot, /EFI, /skycair to it
+  5. In /boot, run: sh skycair-installer-for-linux.run
+  6. Set correct ownership:
+       chown -R guest:users /mnt/yourpartition/skycair
+  7. Reboot and select your new partition
+
+On ext4/XFS, SkyCAIR auto-saves all changes on shutdown.
+No .dat file needed for permanent installs.
+
+
+================================================
+  INCLUDED APPLICATIONS
+================================================
+
+-- DESKTOP ENVIRONMENTS (choose at build time) --
+  COSMIC         System76 Wayland desktop (default build)
+  KDE Plasma     Full-featured Qt desktop
+  Cinnamon       Linux Mint GTK desktop
+  GNOME          Modern GNOME shell
+  Xfce           Lightweight GTK desktop
+  LXQt           Lightweight Qt desktop
+  LXDE           Ultra-lightweight desktop
+  MATE           Classic GNOME 2 fork
+
+-- BUILT-IN FOR ALL DESKTOPS --
+  GParted              Disk partition and format GUI
+  Flatpak              Flathub app store integration
+  PipeWire + WirePlumber  Modern low-latency audio
+  NetworkManager       Network and WiFi management
+  Fastfetch            System information display
+  7-Zip                Archive tool (7z/zip/tar/gz/xz)
+  File Roller          Archive GUI (extract/create)
+  GPicView             Fast image viewer
+  Audacious            Music player
+  GNOME System Monitor Process and resource monitor
+  FFmpeg               Video/audio conversion (CLI)
+  Vulkan               GPU graphics API
+  Intel VA-API         Hardware video decode (Intel/AMD)
+  pavucontrol          Audio volume and device control
+  nmtui                Terminal network config tool
+
+-- SKYCAIR APP STORE (one-click install) --
+
+  BROWSERS
+    Brave           Privacy-first (Chromium-based)
+    Firefox         Mozilla (stable / ESR / beta)
+    LibreWolf       Privacy-hardened Firefox fork
+    Chrome          Google Chrome
+    Chromium        Open-source Chrome
+    Opera           Opera browser
+    Pale Moon       Classic Firefox-based browser
+    Tor Browser     Anonymous / dark web browsing
+
+  OFFICE & PRODUCTIVITY
+    LibreOffice     Full office suite (94 languages)
+    OnlyOffice      Modern collaborative office suite
+    KeePassXC       Password manager
+
+  DEVELOPMENT
+    VSCodium        VS Code (no Microsoft telemetry)
+    Neovim          Advanced terminal editor
+    Notepad Next    Notepad++ for Linux
+    Devel Kit       Compilers, git, make, headers
+    Deno            JavaScript / TypeScript runtime
+
+  DESIGN
+    Lunacy           Vector UI/UX design application
+
+  GAMING
+    Steam           Valve Steam gaming platform
+    Wine            Run Windows apps and games
+    Cemu            Nintendo Wii U emulator
+    PCSX2           Sony PlayStation 2 emulator
+    Multilib        32-bit compatibility libraries
+
+  DRIVERS
+    NVIDIA          Full NVIDIA proprietary driver
+    NVIDIA Lite     NVIDIA driver (slim, no extras)
+    Crippled Sources  Kernel headers for driver builds
+
+  MESSENGERS
+    Telegram        Telegram desktop client
+    Microsoft Teams Teams for Linux
+    WhatsApp (WALC) WhatsApp desktop client
+
+  UTILITIES
+    Etcher          Flash OS images to USB / SD card
+    yt-dlp          Download video from any platform
+    VirtualBox      Virtual machine manager
+    VirtualBox Guest Additions  (use inside VMs)
+
+-- LANGUAGE SUPPORT --
+  English by default.
+  Download the multilanguage module from the App Store.
+  Use the Language Switcher application to change language.
+  CJK fonts (Chinese/Japanese/Korean): activate
+  notoserifcjk-regular.xzm from /skycair/modules/
+
+
+================================================
+  PERFORMANCE TIPS
+================================================
+
+  SSD or NVMe gives the best experience -- faster module
+  loads and near-instant save/restore on shutdown.
+
+  Copy To RAM is the fastest mode. All modules load once
+  at boot; after that the system runs 100% in memory.
+  Ideal for presentations or privacy-sensitive sessions.
+
+  Persistent 16GB on an SSD is the best everyday setup:
+  real-time saves, fast reads, your data survives reboots.
+
+  The kernel is compiled with PREEMPT_FULL and HZ=1000 for
+  low-latency desktop, audio, and gaming performance.
+
+  Vulkan and Intel VA-API are enabled by default for Intel
+  and AMD GPUs. For NVIDIA, install the driver from the
+  App Store after first boot.
+
+  Enable compressed swap (great for low-RAM machines):
+  Add  zram=33%  to /skycair/skycair.cfg
+
+
+================================================
+  TROUBLESHOOTING
+================================================
+
+  Display won't start?
+    Select "Safe Mode" at the boot menu (nomodeset).
+    Install the correct GPU driver from the App Store.
+
+  No network?
+    Run:  nmtui   (terminal network configuration)
+
+  No sound?
+    Run:  pavucontrol   (volume and device manager)
+
+  Boot hangs on slow USB?
+    Add  delay=5  to boot options -- gives the USB
+    extra time to initialize before mounting.
+
+  Changes not saving on Linux filesystem?
+    Run as root:  chown -R guest:users /skycair
+
+  Changes not saving on FAT/NTFS?
+    Use a .dat save file (see Save Data section above)
+    or boot with:  changes=EXIT:/skycair
+
+  Save changes immediately without rebooting?
+    Run as root:  /opt/skycair-scripts/dump-session
+
+  Boot into root recovery?
+    Add at boot prompt:  login=root
+
+
+================================================
+  CHEATCODES -- QUICK REFERENCE
+================================================
+
+Add at boot prompt (Tab key) or save permanently in
+/skycair/skycair.cfg (one per line, no leading spaces):
+
+  changes=/skycair/myfile.dat   Use specific save file
+  changes=EXIT:/skycair         RAM save, flush on exit
+  copy2ram                      Load all modules to RAM
+  rammod=003                    Load only module 003 to RAM
+  zram=33%                      Enable compressed swap
+  login=root                    Auto-login as root
+  timezone=America/Chicago      Set timezone
+  kmap=us                       Set keyboard layout
+  volume=75                     Set master volume (0-100)
+  nonetwork                     Disable auto network
+  nobluetooth                   Disable Bluetooth
+  vgadetect                     Auto-load NVIDIA driver
+  nomodeset                     Disable GPU kernel mode
+  delay=5                       Wait 5s before mounting
+  baseonly                      Load base modules only
+  norootcopy                    Skip rootcopy directory
+
+Full reference: /boot/docs/cheatcodes.txt
+
+
+================================================
+  SUPPORT
+================================================
+
+  SkyCAIR@123Tech.net
+  (608) 454-6660
+  855 Community Dr, Sauk City, WI 53583
+  https://123tech.net
+  https://github.com/omegaanswers/SkySTACK
