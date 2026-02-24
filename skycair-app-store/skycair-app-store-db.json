@@ -648,7 +648,7 @@
             "icon": "notepadnext.svg",
             "tooltip": "Unofficial port of Notepad++ to Linux"
         },
-        "VSCode (Codium)":{
+        "VSCode (Codium)": {
             "script": "vscode",
             "icon": "vscodium.png",
             "tooltip": "Microsoft VS Code with no telemetry/tracking"
@@ -660,20 +660,20 @@
         }
     },
     "Office": {
-        "OnlyOffice":{
+        "OnlyOffice": {
             "script": "onlyoffice",
             "icon": "onlyoffice.png",
             "tooltip": "OnlyOffice suite for Linux"
         },
-        "LibreOffice":{
+        "LibreOffice": {
             "script": "libreoffice",
             "icon": "libreoffice.png",
             "tooltip": "LibreOffice suite for Linux",
-            "channels":[
+            "channels": [
                 "stable",
                 "testing"
             ],
-            "locales":[
+            "locales": [
                 "af",
                 "am",
                 "ar",
@@ -797,50 +797,85 @@
         }
     },
     "Graphics": {
-        "Lunacy":{
+        "Lunacy": {
             "script": "lunacy",
             "icon": "lunacy.png",
             "tooltip": "Design creation application"
+        },
+        "GIMP": {
+            "script": "gimp",
+            "icon": "gimp.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Inkscape": {
+            "script": "inkscape",
+            "icon": "inkscape.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Blender": {
+            "script": "blender",
+            "icon": "blender.svg",
+            "channels": [
+                "stable"
+            ]
         }
     },
     "Games": {
-        "Cemu (Wii U)":{
+        "Cemu (Wii U)": {
             "script": "cemu",
             "icon": "cemu.png",
             "tooltip": "Cemu emulator for Nintendo Wii U"
         },
-        "PCSX2 (PS2)":{
+        "PCSX2 (PS2)": {
             "script": "pcsx2",
             "icon": "pcsx2.png",
             "tooltip": "PCSX2 emulator for Sony Playstation 2"
         },
-        "Steam":{
+        "Steam": {
             "script": "steam",
             "icon": "steam.png",
             "tooltip": "Steam requires multilib, also available in the app store",
             "infoDialog": "Steam requires multilib, also available in the app store.",
             "askInstallationPath": true
+        },
+        "Proton-GE": {
+            "script": "proton-ge",
+            "icon": "steam.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "MangoHud": {
+            "script": "mangohud",
+            "icon": "steam.svg",
+            "channels": [
+                "stable"
+            ]
         }
     },
     "Messengers": {
-        "Teams":{
+        "Teams": {
             "script": "teams",
             "icon": "teams.png",
             "tooltip": "Official Microsoft Teams client for Linux"
         },
-        "Telegram":{
+        "Telegram": {
             "script": "telegram",
             "icon": "telegram.png",
             "tooltip": "Official Telegram client for Linux"
         },
-        "WhatsApp (WALC)":{
+        "WhatsApp (WALC)": {
             "script": "whatsapp",
             "icon": "whatsapp.png",
             "tooltip": "Improved WhatsApp client for Linux"
         }
     },
     "Utils": {
-        "Crippled Sources":{
+        "Crippled Sources": {
             "script": "crippled-sources",
             "icon": "crippled.png",
             "tooltip": "Set of kernel files for compiling drivers"
@@ -855,28 +890,147 @@
             "icon": "etcher.png",
             "tooltip": "Flash OS images to USB drives and SD cards"
         },
-        "Multilib Lite":{
+        "Multilib Lite": {
             "script": "multilib",
             "icon": "multilib.svg",
             "tooltip": "Set of essential libraries for 32bit compatibility"
-
         },
-        "Wine":{
+        "Wine": {
             "script": "wine",
             "icon": "wine.svg",
             "tooltip": "Run Windows applications on Linux",
             "infoDialog": "It's recommended to download Multilib, also available in the app store."
         },
-        "yt-dlp":{
+        "yt-dlp": {
             "script": "yt-dlp",
             "icon": "yt-dlp.png",
             "tooltip": "Terminal application to download videos from various platforms",
             "infoDialog": "It's recommended to download Deno, also available in the app store."
         },
-        "KeePassXC":{
+        "KeePassXC": {
             "script": "keepassxc",
             "icon": "keepassxc.png",
             "tooltip": "Password manager"
+        }
+    },
+    "Media & Streaming": {
+        "OBS Studio": {
+            "script": "obs-studio",
+            "icon": "obs-studio.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "VLC": {
+            "script": "vlc",
+            "icon": "vlc.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Kdenlive": {
+            "script": "kdenlive",
+            "icon": "kdenlive.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "HandBrake": {
+            "script": "handbrake",
+            "icon": "handbrake.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Audacity": {
+            "script": "audacity",
+            "icon": "audacity.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Streamlink": {
+            "script": "streamlink",
+            "icon": "streamlink.svg",
+            "channels": [
+                "stable"
+            ]
+        }
+    },
+    "GPU & Hardware": {
+        "AMD ROCm": {
+            "script": "amd-rocm",
+            "icon": "amd.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "AMD GPU Pro": {
+            "script": "amd-gpu-pro",
+            "icon": "amd.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Vulkan Tools": {
+            "script": "vulkan-tools",
+            "icon": "vulkan.svg",
+            "channels": [
+                "stable"
+            ]
+        }
+    },
+    "AI & Private Computing": {
+        "Ollama": {
+            "script": "ollama",
+            "icon": "ollama.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "Open WebUI": {
+            "script": "open-webui",
+            "icon": "ollama.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "llama.cpp": {
+            "script": "llama-cpp",
+            "icon": "ollama.svg",
+            "channels": [
+                "stable"
+            ]
+        }
+    },
+    "Engineering & CAD": {
+        "FreeCAD": {
+            "script": "freecad",
+            "icon": "freecad.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "OpenSCAD": {
+            "script": "openscad",
+            "icon": "openscad.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "KiCad": {
+            "script": "kicad",
+            "icon": "kicad.svg",
+            "channels": [
+                "stable"
+            ]
+        },
+        "PrusaSlicer": {
+            "script": "prusaslicer",
+            "icon": "prusaslicer.svg",
+            "channels": [
+                "stable"
+            ]
         }
     }
 }
