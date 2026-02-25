@@ -1,0 +1,83 @@
+# SkyCAIR OS — GRUB2 Theme
+# Dark navy — enterprise server OS aesthetic
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+
+# Desktop image (placed at iso/boot/grub/skycair-theme/background.png)
+# Resolution: 1920x1080 or 1024x768 — SkyCAIR dark navy branded image
+desktop-image: "background.png"
+desktop-color: "#0a1628"
+
+# Title
+title-text: "SkyCAIR OS  |  Care About AI Readiness  |  EODv9"
+title-color: "#ffffff"
+title-font: "DejaVu Sans Bold 16"
+
+# Global font
+message-font: "DejaVu Sans Regular 12"
+message-color: "#aabbcc"
+
+# Terminal (fallback)
+terminal-box: "terminal_box_*.png"
+terminal-font: "DejaVu Sans Mono Regular 12"
+
+# Boot menu
++ boot_menu {
+    left   = 10%
+    top    = 28%
+    width  = 80%
+    height = 50%
+
+    item_font:        "DejaVu Sans Regular 14"
+    item_color:       "#ccddee"
+    selected_item_font:  "DejaVu Sans Bold 14"
+    selected_item_color: "#ffffff"
+
+    # Selected row highlight — SkyCAIR blue
+    selected_item_pixmap_style: "select_e.png,select_se.png,select_s.png,select_sw.png,select_w.png,select_nw.png,select_n.png,select_ne.png"
+    selected-color: "#0066cc"
+    highlight-color: "#004499"
+
+    item_height:   28
+    item_padding:  12
+    item_spacing:  4
+    scrollbar:     false
+}
+
+# Timer countdown bar
++ progress_bar {
+    id    = "__timeout__"
+    left  = 10%
+    top   = 82%
+    width = 80%
+    height = 12
+
+    font:          "DejaVu Sans Regular 11"
+    text:          "Booting SkyCAIR OS in %d seconds..."
+    text_color:    "#aabbcc"
+    fg_color:      "#0066cc"
+    bg_color:      "#0a1628"
+    border_color:  "#224466"
+}
+
+# Version label
++ label {
+    left  = 10%
+    top   = 90%
+    width = 40%
+    align = left
+    id    = "__version__"
+    text  = "SkyCAIR OS EODv9  |  2XR, LLC  |  123Tech.net"
+    font  = "DejaVu Sans Regular 10"
+    color = "#446688"
+}
+
+# Keyboard hint
++ label {
+    left  = 50%
+    top   = 90%
+    width = 40%
+    align = right
+    text  = "↑↓ select  |  Enter boot  |  e edit  |  c console"
+    font  = "DejaVu Sans Regular 10"
+    color = "#446688"
+}
