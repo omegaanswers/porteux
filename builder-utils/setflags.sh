@@ -39,8 +39,26 @@ SetFlags() {
 		export SYSTEMBITS="64"
 	fi
 
-	export SLACKWAREDOMAIN="https://mirrors.slackware.com"
-	#export SLACKWAREDOMAIN="https://slackware.uk"
-	#export SLACKWAREDOMAIN="http://ftp.slackware.com/pub"
-	export REPOSITORY="$SLACKWAREDOMAIN/slackware/slackware$SYSTEMBITS-$SLACKWAREVERSION/slackware$SYSTEMBITS"
+	# SkySTACK controlled repository — packages.123tech.net
+	# SkyNetSSL verified: all packages scanned before serving
+	# Falls back to public mirrors if internal repo is unreachable
+	export SKYCAIR_REPO_DOMAIN="https://packages.123tech.net"
+	export SKYCAIR_REPO_SLACKWARE="$SKYCAIR_REPO_DOMAIN/slackware/slackware$SYSTEMBITS-$SLACKWAREVERSION/slackware$SYSTEMBITS"
+	export SKYCAIR_REPO_CUSTOM="$SKYCAIR_REPO_DOMAIN/skycair"
+	export SKYCAIR_REPO_SKYMOD="$SKYCAIR_REPO_DOMAIN/skymod"
+
+	# Fallback public mirrors (used if packages.123tech.net unreachable)
+	export SLACKWAREDOMAIN_FALLBACK_1="https://mirrors.slackware.com"
+	export SLACKWAREDOMAIN_FALLBACK_2="https://slackware.uk"
+
+	# Active repository — try SkySTACK first, fallback to public
+	if curl -sf --max-time 5 "$SKYCAIR_REPO_DOMAIN/health" > /dev/null 2>&1; then
+		export SLACKWAREDOMAIN="$SKYCAIR_REPO_DOMAIN"
+		export REPOSITORY="$SKYCAIR_REPO_SLACKWARE"
+		echo "Using SkySTACK repository: $SKYCAIR_REPO_DOMAIN"
+	else
+		export SLACKWAREDOMAIN="$SLACKWAREDOMAIN_FALLBACK_1"
+		export REPOSITORY="$SLACKWAREDOMAIN/slackware/slackware$SYSTEMBITS-$SLACKWAREVERSION/slackware$SYSTEMBITS"
+		echo "WARNING: packages.123tech.net unreachable — using fallback mirror: $SLACKWAREDOMAIN"
+	fi
 }

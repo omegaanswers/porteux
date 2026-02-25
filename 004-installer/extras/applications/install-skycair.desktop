@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Install SkyCAIR OS
+Comment=Install SkyCAIR OS to your hard drive
+Exec=pkexec calamares
+Icon=system-installer
+Terminal=false
+Categories=System;
+Keywords=install;installer;skycair;setup;
+StartupNotify=true
+NoDisplay=false

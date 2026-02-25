@@ -1,0 +1,31 @@
+# SkyCAIR OS — Calamares Branding
+# 2XR, LLC | Evolve2Linux | 123Tech.net | SkyCAIR@123Tech.net
+---
+componentName: skycair
+
+strings:
+  productName:         "SkyCAIR OS"
+  shortProductName:    "SkyCAIR"
+  version:             "@SKYCAIRVERSION@"
+  shortVersion:        "EODv9"
+  versionedName:       "SkyCAIR OS EODv9"
+  shortVersionedName:  "SkyCAIR EODv9"
+  bootloaderEntryName: "SkyCAIR"
+  productUrl:          "https://123tech.net"
+  supportUrl:          "https://123tech.net/support"
+  knownIssuesUrl:      "https://github.com/omegaanswers/porteux/issues"
+  releaseNotesUrl:     "https://github.com/omegaanswers/porteux/releases"
+
+images:
+  productLogo:         "skycair-logo.png"
+  productIcon:         "skycair-logo.png"
+  productWelcome:      "skycair-welcome.png"
+
+slideshow:             "show.qml"
+slideshowAPI:          2
+
+style:
+  sidebarBackground:   "#0a1628"
+  sidebarText:         "#ffffff"
+  sidebarTextSelect:   "#00aaff"
+  sidebarTextHighlight: "#00aaff"
