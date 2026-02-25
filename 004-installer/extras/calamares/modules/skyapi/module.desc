@@ -1,0 +1,5 @@
+---
+type:      "job"
+name:      "skyapi"
+interface: "python"
+script:    "main.py"

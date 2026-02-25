@@ -1,0 +1,5 @@
+---
+type:      "job"
+name:      "skyhardware"
+interface: "python"
+script:    "main.py"

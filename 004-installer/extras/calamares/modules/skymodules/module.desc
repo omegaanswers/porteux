@@ -1,0 +1,5 @@
+---
+type:      "job"
+name:      "skymodules"
+interface: "python"
+script:    "main.py"
