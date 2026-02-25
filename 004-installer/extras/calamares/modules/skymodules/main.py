@@ -70,6 +70,21 @@ MODULE_CATALOG = {
         "required": False,
         "tiers": ["skygrid", "skystack"],
     },
+    "003-skycube": {
+        "desc": "SkyCUBES — Virtualization (GNOME Boxes + libvirt + KVM/QEMU)",
+        "required": False,
+        "tiers": ["skyair", "skygrid", "skystack"],
+    },
+    "065-skyk12ai": {
+        "desc": "SkyK12Ai — Private Education: Faith & Knowledge United (K-12, homeschool, seminary, 20% discount for schools/churches)",
+        "required": False,
+        "tiers": ["skyair", "skygrid", "skystack"],
+    },
+    "070-skyflowai": {
+        "desc": "SkyFlowAI — AI-powered workflow automation (n8n + SkyOMEGAi + Ollama + OmegaAnswers)",
+        "required": False,
+        "tiers": ["skygrid", "skystack"],
+    },
     "003-skyshield": {
         "desc": "SkySHIELD-ATF (Attack Threat Foundation) — nftables firewall, encrypted DNS, SSH hardening",
         "required": True,

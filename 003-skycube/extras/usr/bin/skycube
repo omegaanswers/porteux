@@ -1,0 +1,293 @@
+#!/bin/bash
+# skycube — SkyCUBES VM management CLI
+# Thin wrapper around virsh / virt-clone / virt-install
+# GNOME Boxes is the GUI frontend — this is the power-user CLI
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+
+SKYCUBE_CONF="/etc/skycube/skycube.conf"
+[ -f "$SKYCUBE_CONF" ] && source "$SKYCUBE_CONF"
+
+POOL_PATH="${SKYCUBE_POOL_PATH:-/skycair/cubes}"
+DEF_CPU="${SKYCUBE_DEFAULT_CPU:-2}"
+DEF_RAM="${SKYCUBE_DEFAULT_RAM:-2048}"
+DEF_DISK="${SKYCUBE_DEFAULT_DISK:-20}"
+VERSION="9.0.0"
+
+_require_libvirt() {
+    if ! command -v virsh >/dev/null 2>&1; then
+        echo "ERROR: virsh not found. Install: pkg-add libvirt qemu" >&2
+        exit 1
+    fi
+}
+
+_require_name() {
+    if [ -z "$1" ]; then
+        echo "ERROR: VM name required." >&2
+        exit 1
+    fi
+}
+
+cmd_list() {
+    _require_libvirt
+    echo "┌─ SkyCUBES — Virtual Machines ────────────────────────────────────┐"
+    virsh list --all --title 2>/dev/null | tail -n +3 | while IFS= read -r line; do
+        echo "│ $line"
+    done
+    echo "└──────────────────────────────────────────────────────────────────┘"
+    echo ""
+    echo "Storage pool: $POOL_PATH"
+    virsh pool-info skycubes 2>/dev/null | grep -E "State|Capacity|Available" | \
+        awk '{printf "  %-12s %s\n", $1, $2}'
+}
+
+cmd_start() {
+    _require_libvirt
+    _require_name "$1"
+    echo "Starting SkyCUBE: $1"
+    virsh start "$1"
+}
+
+cmd_stop() {
+    _require_libvirt
+    _require_name "$1"
+    echo "Stopping SkyCUBE: $1 (ACPI shutdown)"
+    virsh shutdown "$1"
+}
+
+cmd_poweroff() {
+    _require_libvirt
+    _require_name "$1"
+    echo "Force-stopping SkyCUBE: $1"
+    virsh destroy "$1"
+}
+
+cmd_console() {
+    _require_libvirt
+    _require_name "$1"
+    local vm="$1"
+    local backend="${SKYCUBE_VDI_BACKEND:-gnome-boxes}"
+
+    if [ "$backend" = "gnome-boxes" ] && command -v gnome-boxes >/dev/null 2>&1; then
+        echo "Opening $vm in GNOME Boxes..."
+        gnome-boxes &
+    elif command -v virt-viewer >/dev/null 2>&1; then
+        echo "Opening $vm in virt-viewer (SPICE)..."
+        virt-viewer --connect qemu:///session "$vm" &
+    else
+        echo "Opening serial console (text mode):"
+        virsh console "$vm"
+    fi
+}
+
+cmd_create() {
+    _require_libvirt
+    local iso="" name="" cpu="$DEF_CPU" ram="$DEF_RAM" disk="$DEF_DISK"
+
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --from)   iso="$2";  shift 2 ;;
+            --name)   name="$2"; shift 2 ;;
+            --cpu)    cpu="$2";  shift 2 ;;
+            --ram)    ram="$2";  shift 2 ;;
+            --disk)   disk="$2"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+
+    if [ -z "$name" ] || [ -z "$iso" ]; then
+        echo "Usage: skycube create --from <iso> --name <name> [--cpu N] [--ram NGB] [--disk NGB]"
+        echo "Example: skycube create --from /mnt/skycair.iso --name my-vm --cpu 2 --ram 4096 --disk 40"
+        exit 1
+    fi
+
+    [ ! -f "$iso" ] && { echo "ERROR: ISO not found: $iso" >&2; exit 1; }
+
+    mkdir -p "$POOL_PATH"
+    local disk_path="${POOL_PATH}/${name}.qcow2"
+
+    echo "Creating SkyCUBE: $name"
+    echo "  ISO:  $iso"
+    echo "  CPU:  $cpu vCPUs"
+    echo "  RAM:  $ram MB"
+    echo "  Disk: ${disk}GB at $disk_path"
+    echo ""
+
+    virt-install \
+        --connect qemu:///session \
+        --name "$name" \
+        --memory "$ram" \
+        --vcpus "$cpu" \
+        --disk "path=${disk_path},size=${disk},format=qcow2,bus=virtio" \
+        --cdrom "$iso" \
+        --os-variant detect=on,require=off \
+        --graphics spice,listen=127.0.0.1 \
+        --video qxl \
+        --channel spicevmc \
+        --network network=skycube-nat,model=virtio \
+        --noautoconsole
+
+    echo ""
+    echo "SkyCUBE '$name' created. Connect with: skycube console $name"
+}
+
+cmd_snapshot() {
+    _require_libvirt
+    _require_name "$1"
+    local vm="$1"
+    local snap_name="${2:-snap-$(date +%Y%m%d-%H%M%S)}"
+    echo "Creating snapshot '$snap_name' of SkyCUBE: $vm"
+    virsh snapshot-create-as "$vm" \
+        --name "$snap_name" \
+        --description "SkyCUBE snapshot $(date)" \
+        --atomic
+    echo "Snapshot created: $snap_name"
+}
+
+cmd_snapshots() {
+    _require_libvirt
+    _require_name "$1"
+    virsh snapshot-list "$1" --tree
+}
+
+cmd_clone() {
+    _require_libvirt
+    local src="$1" dst="$2"
+    [ -z "$src" ] || [ -z "$dst" ] && {
+        echo "Usage: skycube clone <source> <destination>"
+        exit 1
+    }
+    echo "Cloning SkyCUBE: $src → $dst"
+    virt-clone --connect qemu:///session \
+        --original "$src" \
+        --name "$dst" \
+        --auto-clone
+    echo "Cloned: $dst"
+}
+
+cmd_delete() {
+    _require_libvirt
+    _require_name "$1"
+    local vm="$1"
+    echo -n "Delete SkyCUBE '$vm' and all storage? [y/N] "
+    read -r confirm
+    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+        virsh destroy "$vm" 2>/dev/null
+        virsh undefine "$vm" --remove-all-storage --snapshots-metadata
+        echo "Deleted: $vm"
+    else
+        echo "Cancelled."
+    fi
+}
+
+cmd_report() {
+    _require_libvirt
+    echo "┌─ SkyCUBES Resource Report ────────────────────────────────────────┐"
+    printf "│ %-20s %-6s %-8s %-10s %-8s │\n" "NAME" "CPU" "RAM(MB)" "DISK" "STATE"
+    echo "├───────────────────────────────────────────────────────────────────┤"
+    virsh list --all --name 2>/dev/null | grep -v '^$' | while read -r vm; do
+        local state cpu ram
+        state=$(virsh domstate "$vm" 2>/dev/null)
+        cpu=$(virsh dominfo "$vm" 2>/dev/null | grep "CPU(s)" | awk '{print $2}')
+        ram=$(virsh dominfo "$vm" 2>/dev/null | grep "Max memory" | awk '{print int($3/1024)}')
+        disk=$(virsh domblklist "$vm" 2>/dev/null | grep -v "^Target\|^---\|^$" | \
+               awk '{print $2}' | head -1 | xargs -I{} du -sh {} 2>/dev/null | awk '{print $1}')
+        printf "│ %-20s %-6s %-8s %-10s %-8s │\n" \
+            "${vm:0:20}" "${cpu:-?}" "${ram:-?}" "${disk:--}" "${state:-unknown}"
+    done
+    echo "└──────────────────────────────────────────────────────────────────┘"
+    echo ""
+    echo "Pool: $POOL_PATH"
+    df -h "$POOL_PATH" 2>/dev/null | tail -1 | awk '{printf "  Used: %s / %s (%s free)\n", $3, $2, $4}'
+}
+
+cmd_import() {
+    _require_libvirt
+    local src="" name=""
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --oci) src="$2"; shift 2 ;;
+            --name) name="$2"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+
+    [ -z "$src" ] && { echo "Usage: skycube import --oci <image:tag> [--name <name>]"; exit 1; }
+    [ -z "$name" ] && name=$(echo "$src" | tr ':/' '-')
+
+    echo "Importing OCI image '$src' as SkyCUBE '$name'..."
+    echo "  Step 1: Pull container image"
+    podman pull "$src"
+    echo "  Step 2: Export to QCOW2 (this may take a few minutes)"
+    local tmpdir disk_path
+    tmpdir=$(mktemp -d)
+    disk_path="${POOL_PATH}/${name}.qcow2"
+    podman export "$(podman create "$src")" | \
+        gzip > "${tmpdir}/${name}.tar.gz"
+    qemu-img create -f qcow2 "$disk_path" "${DEF_DISK}G"
+    echo "  OCI → QCOW2 conversion complete: $disk_path"
+    echo "  NOTE: Use virt-install to define the VM from this disk image."
+    echo "  skycube create --from <iso> --name $name will replace the import."
+    rm -rf "$tmpdir"
+}
+
+cmd_help() {
+    cat << 'EOF'
+skycube — SkyCUBES VM Management CLI (v9.0.0)
+GNOME Boxes is the GUI — skycube is the power-user CLI
+2XR, LLC | Evolve2Linux | 123Tech.net
+
+USAGE:
+  skycube <command> [options]
+
+COMMANDS:
+  list                              List all VMs (name, state, CPU, RAM)
+  start  <name>                     Start a VM
+  stop   <name>                     Graceful ACPI shutdown
+  poweroff <name>                   Force stop (power off)
+  console <name>                    Open GNOME Boxes / SPICE console
+  create --from <iso> --name <n>    Create new VM from ISO
+         [--cpu N] [--ram NGB] [--disk NGB]
+  snapshot <name> [snap-name]       Create a snapshot
+  snapshots <name>                  List snapshots (tree view)
+  clone  <src> <dst>                Clone a VM
+  delete <name>                     Delete VM + all storage (with confirm)
+  report                            Resource usage table (all VMs)
+  import --oci <image:tag>          Import OCI container image as QCOW2 SkyCUBE
+
+STORAGE:
+  Default pool: /skycair/cubes/ (SkyVAULT ZFS backed)
+  Config: /etc/skycube/skycube.conf
+
+ENTERPRISE:
+  For multi-node clustering — Proxmox VE (AGPL, free)
+  See: /var/lib/skystack/docs/products/SKYCUBE.md
+  "When you outgrow one node — Proxmox handles clustering"
+
+EOF
+}
+
+# ── Main dispatch ──────────────────────────────────────────────────────────────
+CMD="${1:-help}"
+shift 2>/dev/null || true
+
+case "$CMD" in
+    list)       cmd_list "$@" ;;
+    start)      cmd_start "$@" ;;
+    stop)       cmd_stop "$@" ;;
+    poweroff)   cmd_poweroff "$@" ;;
+    console)    cmd_console "$@" ;;
+    create)     cmd_create "$@" ;;
+    snapshot)   cmd_snapshot "$@" ;;
+    snapshots)  cmd_snapshots "$@" ;;
+    clone)      cmd_clone "$@" ;;
+    delete)     cmd_delete "$@" ;;
+    report)     cmd_report "$@" ;;
+    import)     cmd_import "$@" ;;
+    version)    echo "skycube $VERSION" ;;
+    help|--help|-h) cmd_help ;;
+    *)
+        echo "Unknown command: $CMD" >&2
+        echo "Run: skycube help" >&2
+        exit 1
+        ;;
+esac
