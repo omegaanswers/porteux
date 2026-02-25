@@ -108,6 +108,30 @@ FORWARD: DROP (enable for router/VPN mode)
 
 ---
 
+## SkyBLOCKER — DNS Ad & Tracker Blocker (SkySHIELD Component)
+
+**SkyBLOCKER** is a Pi-hole-based DNS sinkhole running as a **separate Debian
+bookworm-slim container** within the SkySHIELD profile. It provides network-wide
+ad, tracker, and malware domain blocking at the DNS level.
+
+```
+Deployment: Separate container (skycair-skyblocker)
+Base image: pihole/pihole:latest (Debian-based)
+Web UI:     http://localhost:8053/admin
+DNS port:   5300/udp + 5300/tcp (LAN clients point here)
+Upstream:   Unbound DoH (via skyshield) → dnscrypt-proxy → Cloudflare + Quad9
+Blocklists: packages.123tech.net/blocklists/ (pkg-add skyblocker-lists)
+```
+
+**Privacy DNS chain**:
+```
+LAN client → SkyBLOCKER:5300 → Unbound → dnscrypt-proxy → Cloudflare/Quad9 (DoH)
+```
+No Google DNS. No external list servers needed (all served from SkyRepo).
+
+**Blocklist install**: `pkg-add skyblocker-lists`
+Updates served from SkyRepo weekly — fully offline-capable.
+
 ## Future ATF Components (Roadmap)
 
 - **fail2ban**: auto-ban brute-force IPs after 3 failures (integrates with nftables sets)
