@@ -1,0 +1,11 @@
+# SkyCAIR OS — RKNN NPU device permissions
+# Allows non-root users in 'video' group to access NPU
+
+# RK3588 on-chip NPU cores (0, 1, 2)
+KERNEL=="rknpu[0-9]*", SUBSYSTEM=="rknpu", GROUP="video", MODE="0660"
+
+# Hailo-8 M.2 AI accelerator
+KERNEL=="hailo[0-9]*", SUBSYSTEM=="hailo", GROUP="video", MODE="0660"
+
+# Generic RKNN M.2 device
+KERNEL=="rknn[0-9]*", GROUP="video", MODE="0660"

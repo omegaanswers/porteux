@@ -1,0 +1,88 @@
+#!/bin/bash
+# SkyCAIR OS — Open WebUI Service
+# Provides browser UI for Ollama (local) + Claude API (cloud)
+# Access: http://localhost:3001
+
+SKYOMEGAI_CONF="/etc/skycair/skyomegai.conf"
+PIDFILE="/var/run/open-webui.pid"
+LOGFILE="/var/log/open-webui.log"
+
+[ -f "$SKYOMEGAI_CONF" ] && source "$SKYOMEGAI_CONF"
+
+WEBUI_PORT="${WEBUI_PORT:-3001}"
+OLLAMA_URL="http://localhost:11434"
+
+# Build Open WebUI environment
+build_env() {
+    export OLLAMA_BASE_URL="$OLLAMA_URL"
+    export PORT="$WEBUI_PORT"
+    export WEBUI_SECRET_KEY="${WEBUI_SECRET_KEY:-$(cat /etc/machine-id 2>/dev/null | head -c 32)}"
+
+    # Claude API integration
+    if [ "$ENGINE" = "claude" ] || [ "$ENGINE" = "both" ]; then
+        if [ -n "$ANTHROPIC_API_KEY" ]; then
+            export OPENAI_API_KEY="$ANTHROPIC_API_KEY"
+            export OPENAI_API_BASE_URL="https://api.anthropic.com/v1"
+            # Claude models visible in Open WebUI
+            export OPENAI_API_MODELS="${CLAUDE_MODEL:-claude-sonnet-4-6},claude-opus-4-6,claude-haiku-4-5-20251001"
+            echo "  Claude API: enabled (model: ${CLAUDE_MODEL:-claude-sonnet-4-6})"
+        else
+            echo "  WARNING: ENGINE=claude but ANTHROPIC_API_KEY not set in /etc/skycair/skyomegai.conf"
+        fi
+    fi
+
+    if [ "$ENGINE" = "ollama" ] || [ "$ENGINE" = "both" ]; then
+        echo "  Ollama: http://localhost:11434"
+    fi
+}
+
+webui_start() {
+    if [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null; then
+        echo "Open WebUI already running (PID $(cat $PIDFILE))"
+        return 0
+    fi
+
+    # Wait for Ollama to be ready
+    for i in $(seq 1 10); do
+        curl -sf "$OLLAMA_URL/api/version" > /dev/null 2>&1 && break
+        sleep 1
+    done
+
+    echo "Starting Open WebUI (SkyOMEGAi)..."
+    echo "  Engine: ${ENGINE:-ollama}"
+    echo "  Port:   http://localhost:${WEBUI_PORT}"
+
+    build_env
+
+    if command -v open-webui > /dev/null 2>&1; then
+        open-webui serve >> "$LOGFILE" 2>&1 &
+    elif [ -f "/opt/open-webui/lib/open_webui/main.py" ]; then
+        python3 /opt/open-webui/lib/open_webui/main.py >> "$LOGFILE" 2>&1 &
+    else
+        echo "ERROR: Open WebUI not found. Reinstall 003-skyomegai.xzm"
+        return 1
+    fi
+
+    echo $! > "$PIDFILE"
+    echo "Open WebUI started at http://localhost:${WEBUI_PORT}"
+}
+
+webui_stop() {
+    if [ -f "$PIDFILE" ]; then
+        echo "Stopping Open WebUI..."
+        kill "$(cat $PIDFILE)" 2>/dev/null
+        rm -f "$PIDFILE"
+    fi
+}
+
+case "$1" in
+    start)   webui_start ;;
+    stop)    webui_stop  ;;
+    restart) webui_stop; sleep 1; webui_start ;;
+    status)
+        [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null \
+            && echo "Open WebUI running → http://localhost:${WEBUI_PORT:-3001}" \
+            || echo "Open WebUI not running."
+        ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
+esac

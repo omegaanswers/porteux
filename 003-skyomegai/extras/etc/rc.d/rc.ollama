@@ -1,0 +1,82 @@
+#!/bin/bash
+# SkyCAIR OS — Ollama AI Service
+# rc.ollama start|stop|restart|status
+# Called from rc.local when ai= cheatcode is active
+
+OLLAMA_ENV="/etc/ollama/ollama.env"
+SKYOMEGAI_CONF="/etc/skycair/skyomegai.conf"
+OLLAMA_BIN="/usr/bin/ollama"
+PIDFILE="/var/run/ollama.pid"
+LOGFILE="/var/log/ollama.log"
+
+# Load environment
+[ -f "$OLLAMA_ENV" ]       && source "$OLLAMA_ENV"
+[ -f "$SKYOMEGAI_CONF" ]   && source "$SKYOMEGAI_CONF"
+
+# Export for ollama process
+export OLLAMA_HOST OLLAMA_GPU OLLAMA_MODELS OLLAMA_NUM_PARALLEL
+export OLLAMA_MAX_LOADED_MODELS OLLAMA_FLASH_ATTENTION OLLAMA_KEEP_ALIVE
+export OLLAMA_DEBUG
+
+ollama_start() {
+    if [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null; then
+        echo "Ollama is already running (PID $(cat $PIDFILE))"
+        return 0
+    fi
+
+    echo "Starting Ollama AI service..."
+    echo "  Backend: ${OLLAMA_GPU:-cpu}"
+    echo "  Models:  ${OLLAMA_MODELS:-/skycair/ai/models}"
+    echo "  API:     http://${OLLAMA_HOST:-localhost:11434}"
+
+    mkdir -p /skycair/ai/models
+    $OLLAMA_BIN serve >> "$LOGFILE" 2>&1 &
+    echo $! > "$PIDFILE"
+
+    # Wait for API to become available
+    for i in $(seq 1 15); do
+        sleep 1
+        curl -sf "http://${OLLAMA_HOST:-localhost:11434}/api/version" > /dev/null 2>&1 && break
+    done
+
+    # Preload default model if configured
+    if [ -n "$OLLAMA_DEFAULT_MODEL" ]; then
+        echo "  Preloading model: $OLLAMA_DEFAULT_MODEL"
+        $OLLAMA_BIN pull "$OLLAMA_DEFAULT_MODEL" >> "$LOGFILE" 2>&1 &
+    fi
+
+    echo "Ollama started."
+}
+
+ollama_stop() {
+    if [ -f "$PIDFILE" ]; then
+        echo "Stopping Ollama..."
+        kill "$(cat $PIDFILE)" 2>/dev/null
+        rm -f "$PIDFILE"
+    fi
+}
+
+ollama_status() {
+    if [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null; then
+        echo "Ollama running (PID $(cat $PIDFILE))"
+        curl -s "http://${OLLAMA_HOST:-localhost:11434}/api/tags" 2>/dev/null | \
+            python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+models = d.get('models', [])
+print(f'  Loaded models: {len(models)}')
+for m in models:
+    print(f'    {m[\"name\"]} ({m.get(\"size\",0)//1024//1024} MB)')
+" 2>/dev/null || echo "  (no models loaded)"
+    else
+        echo "Ollama is not running."
+    fi
+}
+
+case "$1" in
+    start)   ollama_start  ;;
+    stop)    ollama_stop   ;;
+    restart) ollama_stop; sleep 1; ollama_start ;;
+    status)  ollama_status ;;
+    *) echo "Usage: $0 {start|stop|restart|status}" ;;
+esac
