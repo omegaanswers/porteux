@@ -39,8 +39,11 @@ SkyCAIR OS is a **complete technology platform** — not just an OS:
 | **SkyCAIR OS** | Fast portable OS — boots in 3–5s from USB, full desktop from RAM |
 | **SkyVAULT-OffGrid** | Personal NAS — Samba, Syncthing, Filebrowser (arm64 + x86_64) |
 | **SkyVAULT-Business** | Enterprise NAS/SAN — OpenZFS, JBOD, RAID, Samba, NFS, iSCSI |
-| **SkySHIELD ATF** | Security — firewall, Suricata IDS/IPS, WireGuard VPN, Unbound DNS |
-| **SkyAI** | Private offline AI — Ollama LLM, Open WebUI, Kiwix knowledge base |
+| **SkySHIELD-ATF** | Security — firewall, Suricata IDS/IPS, WireGuard VPN, SkyBLOCKER DNS |
+| **SkyCUBES** | Virtualization — GNOME Boxes + libvirt, `skycube` CLI, SkyLightAI Windows 10 VM |
+| **SkyOMEGAi** | Private offline AI — Ollama LLM, Open WebUI, Kiwix knowledge base |
+| **SkyK12Ai** | Private Education AI — Faith & Knowledge United — K-12, Seminary, Homeschool |
+| **SkyDASH** | Mission Control home page — all portals, any device, port 8080 |
 | **SkyNetSSL** | Safe Secure Linux certification — trust mark for all shipped software |
 | **SkyCAIR App Store** | 53+ applications, SkyNetSSL-reviewed, AppImage + .xzm modules |
 
@@ -100,7 +103,9 @@ See [omegaanswers/SkySTACK — SKYNETSSL-LICENSE.md](https://github.com/omegaans
 - **Immutable option**: boot read-only; optional SkyFILES persistent save layer
 - **64-bit only**: x86_64 and arm64 — Raspberry Pi 5, Rockchip RK3588, modern x86 PCs
 - **AI-ready**: private Ollama LLM inference, RKNN NPU for Rockchip boards
-- **8 desktop environments**: COSMIC (primary), Cinnamon, GNOME, KDE, LXDE, LXQt, MATE, Xfce
+- **Virtualization**: SkyCUBES (GNOME Boxes + libvirt/KVM) — VMs with `skycube` CLI
+- **Desktop**: COSMIC (primary) — written in Rust, Wayland-native, memory-safe
+- **Mission Control**: SkyDASH home page — all services on one page, any device
 - **Offline-first**: works completely without internet — the SkyCAIR TimeCapsule
 - **SkyNetSSL**: every shipped app is security-reviewed and privacy-audited
 
@@ -115,6 +120,7 @@ See [omegaanswers/SkySTACK — SKYNETSSL-LICENSE.md](https://github.com/omegaans
 3. Boot — select from the GRUB menu
 4. Log in as `guest` / `guest`
 5. Open the **SkyCAIR App Store** for browsers, tools, AI, and drivers
+6. After SkySTACK services start, open **SkyDASH** at `http://home.skycair.local:8080`
 
 > **Avoid Rufus/Etcher** — they set media read-only, which disables persistence.
 > Full guide: [iso/boot/docs/install.txt](iso/boot/docs/install.txt)
@@ -127,6 +133,21 @@ username: root     password: toor
 ```
 
 **Change root password immediately** before enabling network services.
+
+---
+
+## SkyDASH — Mission Control
+
+The **home page for your private cloud** — access every SkySTACK portal from any device
+on your LAN — phone, tablet, smart TV, laptop — all in one place.
+
+```
+Access:  http://<host>:8080
+         http://home.skycair.local:8080  (with SkyBLOCKER DNS)
+```
+
+Features: live service health (Ping), SkyNetSSL trust badges, SkyCUBES VDI launcher,
+SkyCAIR brand theme, mobile-first layout, hot-reload config.
 
 ---
 
@@ -147,48 +168,97 @@ NFS:               Available for Linux/Unix clients
 Activate via App Store or: `skyair module activate skymod-skyfiles.xzm`
 
 ### SkyVAULT-Business (Enterprise)
-*OpenZFS · JBOD (mergerfs) · mdadm RAID · Samba · NFS · iSCSI · Cockpit*
+*OpenZFS · JBOD (mergerfs) · mdadm RAID · Samba · NFS · iSCSI · SkyControl*
 
 ```
-Cockpit web UI:    http://localhost:9091  (ZFS/RAID management)
-Samba:             \\<hostname>\<share>
-NFS / iSCSI:       Available for Linux/enterprise clients
+SkyControl UI:  http://localhost:9090  (System + storage management)
+Samba:          \\<hostname>\<share>
+NFS / iSCSI:    Available for Linux/enterprise clients
 ```
 
 Activate via: `skyair module activate skymod-070-skyvault.xzm`
 
 ---
 
-## SkySHIELD — Security (ATF)
+## SkySHIELD-ATF — Security
 
-SkySHIELD ATF (Attack Threat Prevention) integrates into SkyCAIR OS:
+SkySHIELD ATF (Attack Threat Foundation) integrates into SkyCAIR OS:
 
 | Tool | Purpose |
 |------|---------|
-| nftables / firewalld | Zone-based packet filtering |
-| Suricata | IDS/IPS — network intrusion detection |
+| nftables | Closed-loop stateful packet filtering (DROP external, ACCEPT RFC1918 LAN) |
+| Suricata | IDS/IPS — network intrusion detection + prevention |
 | WireGuard | Zero-config peer-to-peer encrypted VPN |
-| Unbound | DNSSEC-validating DNS resolver |
+| dnscrypt-proxy | DoH encrypted DNS (Cloudflare 1.1.1.1 + Quad9 9.9.9.9 — no Google DNS) |
+| **SkyBLOCKER** | Pi-hole DNS ad/tracker/malware blocking (network-wide, any device) |
 | Nmap, Nikto, testssl.sh | Network and web security scanning |
-| Lynis | System hardening audit |
+| Lynis | NIST/DISA STIG system hardening audit |
+| rkhunter | Rootkit detection |
+
+**SkyBLOCKER** provides network-wide DNS-level ad and tracker blocking:
+- Curated 5-tier blocklist: Steven Black, OISD Big, Hagezi Pro, URLhaus, Quad9
+- DNSSEC validated, no Google DNS
+- Web admin: `http://localhost:8053/admin`  |  DNS server: `<host>:5300`
+- `*.skycair.local` — all portals accessible by hostname from any LAN device
 
 Activate: `skyair module activate skymod-skyshield.xzm`
 
 ---
 
-## SkyAI — Private Offline AI
+## SkyCUBES — Virtualization
+
+GNOME Boxes is already in SkyCAIR OS base. SkyCUBES adds libvirt configuration,
+storage pool setup (`/skycair/cubes/`), and the `skycube` CLI.
+
+```bash
+skycube list                             # show all VMs
+skycube create --from skycair.iso --name myvm --cpu 4 --ram 4096 --disk 50
+skycube start myvm                       # start VM
+skycube console myvm                     # open GNOME Boxes to this VM
+skycube snapshot myvm                    # instant snapshot
+skycube stop myvm                        # graceful shutdown
+```
+
+**SkyLightAI** — Windows 10 Atlas SkyCUBE:
+- Privacy-respecting Windows 10 (Atlas debloated) as a ready-to-use QCOW2
+- Steam, Firefox + DuckDuckGo, Chocolatey package manager pre-installed
+- VDI for up to 30 concurrent users via SPICE + RDP
+- Pre-loaded with all SkySTACK portal bookmarks (SkyDASH first)
+- Distributed via SkyRepo (`packages.123tech.net`)
+
+---
+
+## SkyOMEGAi — Private Offline AI
 
 Everything runs **completely offline** after initial model download.
 
 ```bash
 # After module activation:
-ollama pull llama3.2:3b          # 2.0GB — general assistant
-ollama run llama3.2:3b           # Chat from terminal
-# Web interface: http://localhost:3001 (Open WebUI)
-# Knowledge base: http://localhost:8888 (Kiwix — Wikipedia, Bible, survival)
+ollama pull phi3:mini            # 2.3GB — general assistant, CPU capable
+ollama run phi3:mini             # Chat from terminal
+# Web interface:    http://localhost:3001 (Open WebUI — SkyOMEGAi)
+# Knowledge base:  http://localhost:8888 (Kiwix — Wikipedia, Bible, survival)
+# Image gen:       http://localhost:7860 (ComfyUI — Stable Diffusion / FLUX)
 ```
 
 **Rockchip RK3588 NPU**: add `rknn=enable` to `skycair.cfg` for hardware-accelerated inference.
+
+---
+
+## SkyK12Ai — Faith & Knowledge United
+
+**Private Education Learning System** for homeschool families, private religious schools,
+Sunday school, seminary, and faith-based universities.
+
+```
+Secular: Math, Science, History, Language, Arts (K-12 + University)
+Faith:   Scripture, theology, religious history, values formation
+AI tutor: kind, patient, values-aligned, never contradicts the family's faith
+Privacy: FERPA + COPPA — all data stays on-device, 100% offline
+Discount: 20% for schools, churches, libraries, non-profits
+```
+
+Activate: `skyair module activate skymod-065-skyk12ai.xzm`
 
 ---
 
@@ -225,18 +295,20 @@ zram=33%          # Compressed RAM swap
 
 ---
 
-## Desktop Environments
+## Desktop Environment
 
-| Spin | Description |
-|------|-------------|
-| **COSMIC** | System76's Wayland compositor — recommended, fastest |
-| Cinnamon | Windows-like traditional layout |
-| GNOME | Modern GNOME Shell |
-| KDE | Feature-rich, highly customizable |
-| LXDE | Ultra-lightweight (older hardware, low RAM) |
-| LXQt | Qt-based lightweight |
-| MATE | Classic GNOME 2 |
-| Xfce | Fast, lightweight GTK |
+| Desktop | Status | Description |
+|---------|--------|-------------|
+| **COSMIC** | ✅ Primary | Written in Rust, Wayland-native, memory-safe, SkyNetSSL Approved |
+| Cinnamon | Available | Windows-like traditional layout |
+| GNOME | Available | Modern GNOME Shell |
+| KDE | Available | Feature-rich, highly customizable |
+| LXDE | Available | Ultra-lightweight (older hardware, low RAM) |
+| LXQt | Available | Qt-based lightweight |
+| MATE | Available | Classic GNOME 2 |
+| Xfce | Available | Fast, lightweight GTK |
+
+**EODv10**: Fedora 43 Atomic + COSMIC bootc — one OS, one desktop, immutable infrastructure.
 
 ---
 
@@ -256,8 +328,6 @@ zram=33%          # Compressed RAM swap
 | **GPU & Hardware** | NVIDIA Driver, AMD ROCm, Vulkan Tools |
 | **Development** | VSCodium, NeoVim, Deno, Wine |
 | **Security** | KeePassXC, yt-dlp |
-| **Communication** | Telegram, WhatsApp |
-| **Virtualization** | VirtualBox, VirtualBox Guest Additions |
 
 Install applications:
 ```bash
@@ -268,7 +338,7 @@ sh /opt/skycair-scripts/skycair-app-store/applications/obs-studio.sh --activate-
 
 ---
 
-## Installing Applications (All Methods)
+## Installing Applications
 
 **App Store** (recommended): Launch the SkyCAIR App Store for browsers, tools, drivers, and AI.
 
@@ -295,7 +365,7 @@ sh 000-kernel/createModule.sh
 sh 001-core/createModule.sh
 sh 002-gui/createModule.sh
 sh 002-xtra/createModule.sh
-sh 003-cosmic/createModule.sh        # or other desktop
+sh 003-cosmic/createModule.sh        # COSMIC desktop
 sh 05-devel/createModule.sh          # optional
 sh 08-multilanguage/createModule.sh  # optional
 sh 0050-multilib-lite/createModule.sh # optional
@@ -317,6 +387,7 @@ SKYCAIRVERSION=2.6.0 SKYCAIRBUILD=1 sh iso/skycair/create-iso.sh /tmp/skycair.is
 ├── 002-gui/              ← GUI base (Wayland, graphics drivers)
 ├── 002-xtra/             ← Extra utilities (mpv, transmission)
 ├── 003-cosmic/           ← COSMIC desktop environment
+├── 003-skycube/          ← SkyCUBES (libvirt + skycube CLI)
 ├── 003-*/                ← Other desktop environments
 ├── 0050-multilib-lite/   ← 32-bit compatibility
 ├── 05-devel/             ← Development tools
@@ -324,13 +395,13 @@ SKYCAIRVERSION=2.6.0 SKYCAIRBUILD=1 sh iso/skycair/create-iso.sh /tmp/skycair.is
 ├── common/               ← Shared packages (fonts, LightDM)
 ├── iso/
 │   ├── skycair/
-│   │   └── skycair.cfg   ← Boot cheatcodes (AI, DNS, SkyTimeMachine)
+│   │   └── skycair.cfg   ← Boot cheatcodes (AI, DNS, SkyTimeMachine, RKNN)
 │   └── boot/docs/        ← install.txt, cheatcodes.txt
 ├── skycair-app-store/
 │   ├── applications/     ← 53+ installer scripts (SkyNetSSL reviewed)
 │   └── skycair-app-store-db.json
 ├── nvidia-driver/        ← NVIDIA driver module
-└── builder-utils/        ← Build helper scripts
+└── builder-utils/        ← Build helper scripts (setflags.sh → SkyRepo first)
 ```
 
 ---
@@ -343,6 +414,7 @@ SkyCAIR uses `.xzm` squashfs modules stacked via overlayfs at boot:
 /skycair/base/      ← core modules (auto-loaded)
 /skycair/modules/   ← optional modules (auto-loaded)
 /skycair/optional/  ← available but not auto-loaded
+/skycair/cubes/     ← SkyCUBES VM storage (libvirt default pool)
 ```
 
 Activate a module in a live session:
@@ -385,6 +457,9 @@ git merge upstream/main
 # Rebase SkyCAIR branch
 git checkout skycair-2.6-cosmic
 git rebase main
+
+# Push to SkyCAIR OS fork
+git push fork skycair-2.6-cosmic
 ```
 
 ---
@@ -406,8 +481,9 @@ SkyCAIR OS is built on the work of extraordinary open-source communities.
 Full credits: [omegaanswers/SkySTACK — ACKNOWLEDGEMENTS.md](https://github.com/omegaanswers/SkySTACK/blob/main/ACKNOWLEDGEMENTS.md)
 
 **Key foundations**: Slackware (P. Volkerding, 1993) · PorteuX · Porteus · Linux kernel ·
-Rocky Linux · Fedora · COSMIC Desktop (System76) · Samba · Syncthing · Filebrowser ·
-Ollama · Kiwix · Wikimedia Foundation · OBS Studio · Blender · KiCad · FreeCAD · and many more.
+COSMIC Desktop (System76) · GNOME Boxes · libvirt · Samba · Syncthing · Filebrowser ·
+Ollama · Open WebUI · Kiwix · Wikimedia Foundation · Pi-hole · Homer · OBS Studio ·
+Blender · KiCad · FreeCAD · and many more.
 
 ---
 
