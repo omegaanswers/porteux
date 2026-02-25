@@ -21,7 +21,7 @@ if os.geteuid() != 0:
 DB_JSON_FILE = 'skycair-app-store-db.json'
 MAX_AGE_HOURS = 6
 
-REPO_APPSTORE_URL = "https://raw.githubusercontent.com/omegaanswers/porteux/refs/heads/skycair-2.6-cosmic/skycair-app-store/"
+REPO_APPSTORE_URL = "https://raw.githubusercontent.com/omegaanswers/skycair-os/refs/heads/skycair-2.6-cosmic/skycair-app-store/"
 REPO_APPS_URL = REPO_APPSTORE_URL + 'applications/'
 REPO_ICONS_URL = REPO_APPSTORE_URL + 'icons/'
 

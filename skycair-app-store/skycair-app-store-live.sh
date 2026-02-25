@@ -30,7 +30,7 @@ fi
 
 BASE_GITHUB_URL="https://raw.githubusercontent.com"
 USER="omegaanswers"
-REPO="porteux"
+REPO="skycair-os"
 FOLDER="skycair-app-store"
 BRANCH="skycair-2.6-cosmic"
 REPO_FOLDER_PATH="$BASE_GITHUB_URL/$USER/$REPO/refs/heads/$BRANCH/$FOLDER"

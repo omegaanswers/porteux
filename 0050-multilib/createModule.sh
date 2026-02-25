@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MODULENAME="0050-multilib-lite"
+MODULENAME="0050-multilib"
 
 export SYSTEMBITS=
 

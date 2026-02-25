@@ -13,8 +13,8 @@ strings:
   bootloaderEntryName: "SkyCAIR"
   productUrl:          "https://123tech.net"
   supportUrl:          "https://123tech.net/support"
-  knownIssuesUrl:      "https://github.com/omegaanswers/porteux/issues"
-  releaseNotesUrl:     "https://github.com/omegaanswers/porteux/releases"
+  knownIssuesUrl:      "https://github.com/omegaanswers/skycair-os/issues"
+  releaseNotesUrl:     "https://github.com/omegaanswers/skycair-os/releases"
 
 images:
   productLogo:         "skycair-logo.png"

@@ -50,7 +50,7 @@ SkyCAIR modules must be built in a **Slackware 64-bit current** or
 **SkyCAIR live** environment. Build order:
 
 ```
-000-kernel → 001-core → 002-gui → 002-xtra → 003-<desktop> → (optional: 05-devel, 08-multilanguage, 0050-multilib-lite)
+000-kernel → 001-core → 002-gui → 002-xtra → 003-<desktop> → (optional: 05-devel, 08-multilanguage, 0050-multilib)
 ```
 
 Output: `/tmp/skycair-builder-[version]/`

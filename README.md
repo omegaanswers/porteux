@@ -3,9 +3,9 @@
 > **Care About AI Readiness**
 > *A TimeCapsule for Every Human — Home or Business*
 
-[![Validate Build Scripts](https://github.com/omegaanswers/porteux/actions/workflows/validate.yml/badge.svg?branch=skycair-2.6-cosmic)](https://github.com/omegaanswers/porteux/actions/workflows/validate.yml)
+[![Validate Build Scripts](https://github.com/omegaanswers/skycair-os/actions/workflows/validate.yml/badge.svg?branch=skycair-2.6-cosmic)](https://github.com/omegaanswers/skycair-os/actions/workflows/validate.yml)
 [![License](https://img.shields.io/badge/license-Source%20Available-blue)](LICENSE)
-[![Version](https://img.shields.io/badge/version-v2.6.0-brightgreen)](https://github.com/omegaanswers/porteux/releases/tag/v2.6.0-skycair)
+[![Version](https://img.shields.io/badge/version-v2.6.0-brightgreen)](https://github.com/omegaanswers/skycair-os/releases/tag/v2.6.0-skycair)
 [![Platform](https://img.shields.io/badge/platform-x86__64%20%7C%20arm64-lightgrey)](#)
 [![Desktop](https://img.shields.io/badge/desktop-COSMIC-purple)](https://github.com/pop-os/cosmic-epoch)
 [![SkyNetSSL](https://img.shields.io/badge/SkyNetSSL-Safe%20Secure%20Linux-green)](https://github.com/omegaanswers/SkySTACK/blob/main/docs/skynetssl/README.md)
@@ -21,7 +21,7 @@
 | Address | 855 Community Dr, Sauk City, WI 53583 |
 | YouTube | [Evolve2Linux](https://youtube.com/@Evolve2Linux) · [OmegaAnswers](https://youtube.com/@OmegaAnswers) |
 | Social | Facebook/Instagram: Evolve2Linux · X/TikTok: OmegaAnswers |
-| Branch | [`skycair-2.6-cosmic`](https://github.com/omegaanswers/porteux/tree/skycair-2.6-cosmic) |
+| Branch | [`skycair-2.6-cosmic`](https://github.com/omegaanswers/skycair-os/tree/skycair-2.6-cosmic) |
 | Stack Repo | [omegaanswers/SkySTACK](https://github.com/omegaanswers/SkySTACK) |
 
 ---
