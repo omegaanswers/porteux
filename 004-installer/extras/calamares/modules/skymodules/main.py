@@ -70,6 +70,11 @@ MODULE_CATALOG = {
         "required": False,
         "tiers": ["skygrid", "skystack"],
     },
+    "003-skyshield": {
+        "desc": "SkySHIELD-ATF (Attack Threat Foundation) — nftables firewall, encrypted DNS, SSH hardening",
+        "required": True,
+        "tiers": ["iot", "skyair", "skygrid", "skystack"],
+    },
     "004-installer": {
         "desc": "Calamares installer (remove after install)",
         "required": False,

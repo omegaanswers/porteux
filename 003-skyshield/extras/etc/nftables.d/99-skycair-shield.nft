@@ -1,0 +1,90 @@
+#!/usr/sbin/nft -f
+# SkyCAIR OS — SkySHIELD ATF Firewall Ruleset
+# FIPS/CIS Benchmark / HIPAA §164.312 / Government closed-loop defaults
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+#
+# Policy summary:
+#   INPUT  — DROP by default; ACCEPT from LAN (RFC1918), loopback, established
+#   OUTPUT — ACCEPT all (outbound: SkyAPI, SkyRepo, NTP, ACME, DoH all allowed)
+#   FORWARD— DROP (enable in SkySHIELD ATF router/VPN mode)
+#
+# All SkySTACK module services are LAN-only by this policy:
+#   Ollama :11434, Open WebUI :8080, SkyRepo :8088, Cockpit :9090,
+#   Syncthing :22000/:8384, Samba :445/:139, SkyAPI :8443, SSH :22
+
+flush ruleset
+
+table inet skycair_shield {
+
+    # ── Input ─────────────────────────────────────────────────────────────────
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        # Loopback — required for dnscrypt-proxy, AI local services, IPC
+        iif "lo" accept comment "loopback required"
+
+        # Established / related — allow replies to outbound connections
+        ct state { established, related } accept comment "established/related"
+        ct state invalid drop comment "drop invalid state"
+
+        # ── Local network (RFC1918) — full SkySTACK service access ──────────
+        # All SkySTACK modules accessible from LAN only (closed-loop policy)
+        ip  saddr { 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 } \
+            accept comment "RFC1918 LAN full access"
+        ip6 saddr { fc00::/7, fe80::/10 } \
+            accept comment "RFC1918 LAN6 full access"
+
+        # ── ICMP from external — block ping, allow operational types ─────────
+        # Smurf/ping-flood mitigation; routing ICMP preserved per RFC 4890
+        ip  protocol icmp icmp type echo-request \
+            drop comment "block external ping"
+        ip6 nexthdr icmpv6 icmpv6 type echo-request \
+            drop comment "block external ping6"
+
+        # Allow ICMPv4 operational types (unreachable, TTL exceeded, etc.)
+        ip protocol icmp icmp type {
+            destination-unreachable,
+            time-exceeded,
+            parameter-problem
+        } accept comment "ICMPv4 operational"
+
+        # Allow ICMPv6 required for IPv6 operation (RFC 4890 §4.4)
+        ip6 nexthdr icmpv6 icmpv6 type {
+            destination-unreachable,
+            packet-too-big,
+            time-exceeded,
+            parameter-problem,
+            nd-neighbor-solicitation,
+            nd-neighbor-advertisement,
+            nd-router-solicitation,
+            nd-router-advertisement
+        } accept comment "ICMPv6 required"
+
+        # ── Log and drop all other external traffic ───────────────────────────
+        limit rate 5/minute \
+            log prefix "skycair-shield: " level warn flags all comment "rate-limited drop log"
+    }
+
+    # ── Output ────────────────────────────────────────────────────────────────
+    chain output {
+        type filter hook output priority filter; policy accept;
+        # Outbound fully allowed:
+        #   DNS  → dnscrypt-proxy on 127.0.0.1:53 (encrypted, no cleartext leak)
+        #   HTTP/S → SkyRepo, SkyAPI, ACME certificate renewal
+        #   NTP  → time sync
+        #   Outbound SSH → user-initiated connections
+        #   AI   → model downloads (Ollama pull), Claude API calls
+    }
+
+    # ── Forward ───────────────────────────────────────────────────────────────
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+        # Closed-loop: this machine does not route traffic by default.
+        # To enable SkySHIELD ATF router/VPN gateway mode:
+        #   1. Set net.ipv4.ip_forward = 1 in sysctl
+        #   2. Uncomment below and add masquerade rule in postrouting
+        # ct state { established, related } accept
+        limit rate 5/minute \
+            log prefix "skycair-shield-fwd: " level warn
+    }
+}

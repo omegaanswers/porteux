@@ -1,0 +1,66 @@
+# SkyCAIR OS — SkySHIELD-ATF Encrypted DNS
+# Provider: dnscrypt-proxy 2.x
+# Privacy-first: Cloudflare (no-log) + Quad9 (malware filter) + Mullvad
+# NO Google DNS (8.8.8.8 / 8.8.4.4) — HIPAA §164.312(e) / privacy compliance
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+
+# Bind to localhost — nftables ensures only local processes reach port 53
+listen_addresses = ['127.0.0.1:53', '[::1]:53']
+
+# Require resolvers that do not log queries (HIPAA / privacy requirement)
+require_nolog   = true
+require_nofilter = false
+
+# Enable both DNSCrypt and DoH (DNS-over-HTTPS) protocols
+dnscrypt_servers = true
+doh_servers      = true
+doh3_servers     = false    # HTTP/3 QUIC — enable if resolver supports it
+
+# ── Resolver selection ────────────────────────────────────────────────────────
+# All selected resolvers: no-log, no Google infrastructure
+server_names = [
+    'cloudflare',                       # 1.1.1.1 — Anycast, no-log
+    'cloudflare-ipv6',                  # 2606:4700:4700::1111
+    'quad9-dnscrypt-ip4-filter-pri',    # 9.9.9.9 — malware/phishing block
+    'quad9-dnscrypt-ip6-filter-pri',    # 2620:fe::fe
+    'mullvad-doh',                      # Mullvad VPN privacy DNS
+]
+
+# Bootstrap resolvers — used ONCE to resolve DoH server hostnames on first run.
+# After bootstrap, all queries go through encrypted channels.
+bootstrap_resolvers = ['9.9.9.9:53', '1.1.1.1:53']
+ignore_system_dns = true
+
+# ── Cache ─────────────────────────────────────────────────────────────────────
+# Reduces outbound query frequency; improves response time and privacy
+cache         = true
+cache_size    = 4096
+cache_min_ttl = 2400
+cache_max_ttl = 86400
+
+# ── Security ──────────────────────────────────────────────────────────────────
+# Prevent internal/private queries from leaking to external resolvers
+block_unqualified  = true   # Block .local, .internal, .corp, etc.
+block_undelegated  = true   # Block queries for undelegated TLDs
+
+# Reject responses with bogus NXDOMAIN (NXDOMAIN hijacking protection)
+reject_ttl = 10
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+# HIPAA §164.312(b): audit logging required
+# Log level 1 = info (access log without query content)
+log_level = 1
+log_file  = '/var/log/dnscrypt-proxy.log'
+
+# ── Resolver lists ────────────────────────────────────────────────────────────
+[sources]
+  [sources.public-resolvers]
+  # Signed resolver list from DNSCrypt project
+  urls = [
+    'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md',
+    'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md',
+  ]
+  cache_file    = '/var/cache/dnscrypt-proxy/public-resolvers.md'
+  minisign_key  = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+  refresh_delay = 72
+  prefix        = ''

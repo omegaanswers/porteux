@@ -1,0 +1,75 @@
+#!/bin/bash
+# SkyCAIR OS — SkySHIELD-ATF Encrypted DNS Service
+# dnscrypt-proxy: DoH + DNSCrypt — no Google, privacy-first
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+
+DNSCRYPT_BIN="/usr/sbin/dnscrypt-proxy"
+DNSCRYPT_CONF="/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
+DNSCRYPT_PID="/var/run/dnscrypt-proxy.pid"
+CACHE_DIR="/var/cache/dnscrypt-proxy"
+LOG_DIR="/var/log"
+
+dns_start() {
+    if [ ! -x "$DNSCRYPT_BIN" ]; then
+        echo "SkySHIELD-ATF DNS: dnscrypt-proxy not found at $DNSCRYPT_BIN" >&2
+        echo "  Install from SkyRepo: slapt-get --install dnscrypt-proxy"
+        return 1
+    fi
+
+    if [ -f "$DNSCRYPT_PID" ] && kill -0 "$(cat $DNSCRYPT_PID)" 2>/dev/null; then
+        echo "SkySHIELD-ATF DNS: dnscrypt-proxy already running"
+        return 0
+    fi
+
+    mkdir -p "$CACHE_DIR" "$LOG_DIR"
+
+    echo "SkySHIELD-ATF DNS: Starting encrypted DNS (Cloudflare + Quad9 DoH/DNSCrypt)..."
+    $DNSCRYPT_BIN -config "$DNSCRYPT_CONF" -pidfile "$DNSCRYPT_PID" -daemonize
+    sleep 1
+
+    if [ -f "$DNSCRYPT_PID" ] && kill -0 "$(cat $DNSCRYPT_PID)" 2>/dev/null; then
+        echo "SkySHIELD-ATF DNS: Active — all DNS encrypted, no Google DNS leakage"
+    else
+        echo "SkySHIELD-ATF DNS: ERROR — failed to start" >&2
+        return 1
+    fi
+}
+
+dns_stop() {
+    if [ -f "$DNSCRYPT_PID" ]; then
+        echo "SkySHIELD-ATF DNS: Stopping dnscrypt-proxy..."
+        kill "$(cat $DNSCRYPT_PID)" 2>/dev/null
+        rm -f "$DNSCRYPT_PID"
+        echo "SkySHIELD-ATF DNS: Stopped (WARNING: DNS now unencrypted)"
+    else
+        echo "SkySHIELD-ATF DNS: Not running"
+    fi
+}
+
+dns_status() {
+    echo "=== SkySHIELD-ATF Encrypted DNS Status ==="
+    if [ -f "$DNSCRYPT_PID" ] && kill -0 "$(cat $DNSCRYPT_PID)" 2>/dev/null; then
+        echo "dnscrypt-proxy: RUNNING (PID $(cat $DNSCRYPT_PID))"
+        echo "Listening: 127.0.0.1:53, [::1]:53"
+        echo "Resolvers: Cloudflare 1.1.1.1 + Quad9 9.9.9.9 (no Google DNS)"
+        # Quick test
+        if command -v dig >/dev/null 2>&1; then
+            echo "DNS test (dig @127.0.0.1 skycair.123tech.net):"
+            dig @127.0.0.1 skycair.123tech.net +short +timeout=3 2>/dev/null || echo "  (no response — check connectivity)"
+        fi
+    else
+        echo "dnscrypt-proxy: NOT RUNNING"
+        echo "WARNING: DNS is unencrypted — start with: rc.dnscrypt-proxy start"
+    fi
+}
+
+case "$1" in
+    start)   dns_start   ;;
+    stop)    dns_stop    ;;
+    restart) dns_stop; sleep 1; dns_start ;;
+    status)  dns_status  ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac

@@ -1,0 +1,52 @@
+#!/bin/bash
+# SkyCAIR OS — SkySHIELD-ATF (Attack Threat Foundation)
+# nftables firewall service controller
+# 2XR, LLC | Evolve2Linux | 123Tech.net
+
+NFTABLES_CONF="/etc/nftables.conf"
+NFTABLES_D="/etc/nftables.d"
+NFTABLES_BIN="/usr/sbin/nft"
+
+firewall_start() {
+    echo "SkySHIELD-ATF: Loading firewall rules..."
+    if [ -x "$NFTABLES_BIN" ] && [ -f "$NFTABLES_CONF" ]; then
+        $NFTABLES_BIN -f "$NFTABLES_CONF"
+        if [ $? -eq 0 ]; then
+            echo "SkySHIELD-ATF: Firewall active — closed-loop policy enforced"
+        else
+            echo "SkySHIELD-ATF: ERROR loading firewall rules" >&2
+            return 1
+        fi
+    else
+        echo "SkySHIELD-ATF: nft not found or config missing" >&2
+        return 1
+    fi
+}
+
+firewall_stop() {
+    echo "SkySHIELD-ATF: Flushing firewall rules (OPEN — use with caution)..."
+    $NFTABLES_BIN flush ruleset
+    echo "SkySHIELD-ATF: Firewall cleared — all traffic now allowed"
+}
+
+firewall_status() {
+    echo "=== SkySHIELD-ATF Firewall Status ==="
+    $NFTABLES_BIN list ruleset 2>/dev/null || echo "No rules loaded"
+}
+
+firewall_reload() {
+    echo "SkySHIELD-ATF: Reloading rules..."
+    firewall_start
+}
+
+case "$1" in
+    start)   firewall_start   ;;
+    stop)    firewall_stop    ;;
+    restart) firewall_stop; sleep 1; firewall_start ;;
+    reload)  firewall_reload  ;;
+    status)  firewall_status  ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|reload|status}"
+        exit 1
+        ;;
+esac
