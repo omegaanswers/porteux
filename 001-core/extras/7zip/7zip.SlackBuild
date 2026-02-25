@@ -29,6 +29,9 @@ cd ..
 info=$(DownloadLatestFromGithub "ip7z" ${PRGNAM})
 VERSION=${info#* }
 
+# SkyRepo first — download pre-built if available, build from source otherwise
+TryPrebuiltFromSkyRepo "${PRGNAM}" "${VERSION}" && exit 0
+
 tar xfv $PRGNAM-$VERSION.tar.?z*
 cd $PRGNAM-$VERSION
 

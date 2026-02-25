@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$BUILDERUTILSPATH/latestfromgithub.sh"
+
 PRGNAM=procps-ng
 PRGNAMDOWNLOAD=procps
 
@@ -15,6 +17,10 @@ cd $TMP
 
 downloadedVersion=$(curl -s https://gitlab.com/${PRGNAM}/${PRGNAMDOWNLOAD}/-/tags?format=atom | grep -oPm 20 '(?<= <title>)[^<]+' | grep -v rc | sort -Vr | head -1)
 VERSION=${downloadedVersion//[vV]}
+
+# SkyRepo first — download pre-built if available, build from source otherwise
+TryPrebuiltFromSkyRepo "${PRGNAM}" "${VERSION}" && exit 0
+
 wget https://gitlab.com/${PRGNAM}/${PRGNAMDOWNLOAD}/-/archive/${downloadedVersion}/${PRGNAMDOWNLOAD}-${downloadedVersion}.tar.gz
 
 PSMISCVER=$(curl -s https://gitlab.com/psmisc/psmisc/-/tags?format=atom | grep -oPm 20 '(?<= <title>)[^<]+' | grep -v rc | sort -Vr | head -1)

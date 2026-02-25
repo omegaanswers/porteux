@@ -17,6 +17,9 @@ cd $TMP
 VERSION=$(GetLatestVersionTagFromGithub "rpm-software-management" ${PRGNAM})
 VERSION=$(echo $VERSION | cut -d "-" -f2)
 
+# SkyRepo first — download pre-built if available, build from source otherwise
+TryPrebuiltFromSkyRepo "${PRGNAM}" "${VERSION}" && exit 0
+
 wget https://github.com/rpm-software-management/${PRGNAM}/releases/download/${PRGNAM}-${VERSION}-release/${PRGNAM}-${VERSION}.tar.bz2
 
 tar xvf ${PRGNAM}*.tar.?z*

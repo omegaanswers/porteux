@@ -17,6 +17,9 @@ cd $TMP
 info=$(DownloadLatestFromGithub "fastfetch-cli" ${PRGNAM})
 VERSION=${info#* }
 
+# SkyRepo first — download pre-built if available, build from source otherwise
+TryPrebuiltFromSkyRepo "${PRGNAM}" "${VERSION}" && exit 0
+
 tar xvf ${PRGNAM}-${VERSION}.tar.gz
 cd ${PRGNAM}-${VERSION}
 

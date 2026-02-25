@@ -51,7 +51,7 @@ sh $SCRIPTPATH/deps/${package}/${package}.SlackBuild || exit 1
 find $MODULEPATH -mindepth 1 -maxdepth 1 ! \( -name "packages" \) -exec rm -rf '{}' \; 2>/dev/null
 done
 
-# core extras
+# core extras (neofetch provided by fastfetch wrapper at /usr/bin/neofetch)
 for package in \
 	fastfetch \
 	7zip \
