@@ -121,7 +121,7 @@ Custom sizes (change count):
     32 GB = count=32768
     64 GB = count=65536
 
-Custom location -- add this cheatcode at boot:
+Custom location -- add this SkyLEGO parameter at boot:
     changes=/path/to/yourfile.dat
 
 NOTE: Save files require a Linux filesystem (ext4 or XFS).
@@ -316,7 +316,7 @@ Add at boot prompt (Tab key) or save permanently in
   baseonly                      Load base modules only
   norootcopy                    Skip rootcopy directory
 
-Full reference: /boot/docs/cheatcodes.txt
+Full reference: /boot/docs/skylego.txt
 
 
 ================================================

@@ -1,50 +1,50 @@
 ================================================
-  SkyCAIR v2.6  --  Cheatcodes Reference
+  SkyCAIR v2.6  --  SkyLEGO parameters Reference
   2XR, LLC | Evolve2Linux | 123Tech.net
   SkyCAIR@123Tech.net | (608) 454-6660
 ================================================
 
-Cheatcodes for SkyCAIR
+SkyLEGO parameters for SkyCAIR
 =======================================
 
-Cheatcodes are boot parameters unique to SkyCAIR that are used to
+SkyLEGO parameters are boot parameters unique to SkyCAIR that are used to
 affect the boot process. You can use these parameters to enable/disable
 or modify specific features, start SkyCAIR from a specific location,
 load additional modules, etc.
 
-To add one or more cheatcodes during boot time, reboot your computer
+To add one or more skylego during boot time, reboot your computer
 and wait until the SkyCAIR logo appears, then press Escape, choose
 your desired menu entry and press Tab to edit the command line. Add
-the desired cheatcode from the list in the next section of this document.
+the desired SkyLEGO parameter from the list in the next section of this document.
 
-If you want to save a cheatcode so it loads automatically each time
+If you want to save a SkyLEGO parameter so it loads automatically each time
 you boot SkyCAIR, you can edit one of the skycair.cfg files. For
-cheatcodes related to the boot profile (e.g. Graphics Mode, Always Fresh,
+skylego related to the boot profile (e.g. Graphics Mode, Always Fresh,
 etc), like 'changes=', edit '/boot/syslinux/skycair.cfg' and add
 them at the end of the 'APPEND' line in the desired boot profile section.
-For cheatcodes that will apply to all boot profiles,
+For skylego that will apply to all boot profiles,
 '/skycair/skycair.cfg' can be more convenient.
 
-Here's an example for adding the 'noauto' and 'volume=30' cheatcodes to
+Here's an example for adding the 'noauto' and 'volume=30' skylego to
 'Graphics Mode' boot profile in '/boot/syslinux/skycair.cfg' (that has
-another cheatcode by default):
+another SkyLEGO parameter by default):
 
 APPEND changes=EXIT:/skycair noauto volume=30
 
-NOTE: the following cheatcodes will be ignored when placed in
+NOTE: the following skylego will be ignored when placed in
 '/skycair/skycair.cfg' because they affect how SkyCAIR storage
 media is detected and mounted: 'cfgfile=', 'delay=', 'from=',
 'mopt=', 'fsck'.
 
-NOTE: for all other cheatcodes that appear in multiple places, SkyCAIR
+NOTE: for all other skylego that appear in multiple places, SkyCAIR
 uses the following priority list (from higher to lower):
 1. /skycair/skycair.cfg
 2. manual boot command line edit
 3. /boot/syslinux/skycair.cfg
 
-NOTE: cheatcodes are sometimes listed in the next section in single
+NOTE: skylego are sometimes listed in the next section in single
 quotes (e.g. 'example=value') for clarity in the documentation.
-When entering these cheatcodes, do not include the quote marks.
+When entering these skylego, do not include the quote marks.
 
 NOTE: if you're looking for generic boot parameters that apply to all
 Linux distros, you can find more information by visiting:
@@ -52,7 +52,7 @@ https://docs.kernel.org/admin-guide/kernel-parameters.html
 
 ---------------------------------------
 
-List of available cheatcodes in alphabetical order:
+List of available skylego in alphabetical order:
 
 baseonly
 
@@ -70,7 +70,7 @@ cfgfile=file.cfg
        Example:
        cfgfile=skycair-usb.cfg
        
-       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       NOTE: this SkyLEGO parameter is ignored if set in '/skycair/skycair.cfg'
        because it affects how SkyCAIR storage media is detected and
        mounted.
 
@@ -98,7 +98,7 @@ changes=/path
        
        It's not recommended to use this option if the path points
        to a slow device, such as a USB stick. In this case, use
-       this cheatcode in conjunction with 'EXIT:'.
+       this SkyLEGO parameter in conjunction with 'EXIT:'.
 
        Examples:
        changes=EXIT:/mnt/sdb2
@@ -131,10 +131,10 @@ changes-ro
    ... Keep saved changes in a read-only state. This is useful
        when you have your system set up exactly how you like it
        and do not want to save any other changes you might make
-       during a live session. This cheatcode should be used in
-       conjunction with the 'changes=' or 'changes=EXIT:' cheatcodes.
+       during a live session. This SkyLEGO parameter should be used in
+       conjunction with the 'changes=' or 'changes=EXIT:' skylego.
 
-       NOTE: remove the 'changes-ro' cheatcode from the bootloader
+       NOTE: remove the 'changes-ro' SkyLEGO parameter from the bootloader
        config to start saving changes as normal (effective after
        a reboot).
 
@@ -151,7 +151,7 @@ cliexec=my_script
        with '~'.
        
        NOTE: to start graphical applications please use 'guiexec='
-       cheatcode instead.
+       SkyLEGO parameter instead.
        
        Example (to echo your text with spaces instead of '~'):
        cliexec=echo~Shutting~power;poweroff
@@ -162,7 +162,7 @@ copy2ram
        to boot SkyCAIR properly. Copy2ram slows down the boot phase
        a bit but speeds up the SkyCAIR experience.
 
-       NOTE: You can use 'rammod' cheatcode to selectively load
+       NOTE: You can use 'rammod' SkyLEGO parameter to selectively load
        modules to RAM - see the 'rammod' description below.
 
 delay=value
@@ -173,7 +173,7 @@ delay=value
        process):
        delay=5
        
-       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       NOTE: this SkyLEGO parameter is ignored if set in '/skycair/skycair.cfg'
        because it's also used to delay the filesystem check ('fsck'),
        and this check requires partitions to be unmounted.
 
@@ -192,7 +192,7 @@ from=/path
    ... Load SkyCAIR from the specified partition, folder or ISO file.
 
        NOTE: if a destination partition is not provided with this
-       cheatcode, the booting script will search through all
+       SkyLEGO parameter, the booting script will search through all
        available devices for your data.
 
        Example (to load unpacked SkyCAIR ISO from the second
@@ -206,7 +206,7 @@ from=/path
        Example (to load the SkyCAIR data from 'skycair-test.iso'):
        from=/mnt/sda1/skycair-test.iso
        
-       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       NOTE: this SkyLEGO parameter is ignored if set in '/skycair/skycair.cfg'
        because it affects how SkyCAIR storage media is detected and
        mounted.
 
@@ -218,9 +218,9 @@ fsck
        when it's mounted. A log file will be shown after boot.
 
        NOTE: on some systems, you will need to use the 'delay='
-       cheatcode in order to allow your devices to settle.
+       SkyLEGO parameter in order to allow your devices to settle.
 
-       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       NOTE: this SkyLEGO parameter is ignored if set in '/skycair/skycair.cfg'
        because it affects how SkyCAIR storage media is detected and
        mounted.
 
@@ -231,7 +231,7 @@ fscknolog
 guiexec=my_command
 
    ... Execute specified command(s) in runlevel 4, when the graphical
-       interface is loaded; unlike 'cliexec' this cheatcode can be
+       interface is loaded; unlike 'cliexec' this SkyLEGO parameter can be
        used to start graphical applications.
        
        Use semicolons (;) as command separators with no spaces. If
@@ -254,7 +254,7 @@ kmap=keyboardmap
 
        NOTE: it may not work in some Wayland sessions.
        NOTE: changing the keyboard layout using the desktop environment
-       settings may override this cheatcode.
+       settings may override this SkyLEGO parameter.
 
        Example (to set American keyboard layout with accent support):
        kmap=us:alt-intl
@@ -295,7 +295,7 @@ mopt
        Example:
        mopt=realtime,sync,users,nosuid,noexec
        
-       NOTE: this cheatcode is ignored if set in '/skycair/skycair.cfg'
+       NOTE: this SkyLEGO parameter is ignored if set in '/skycair/skycair.cfg'
        because it affects how SkyCAIR storage media is detected and
        mounted.
 
@@ -331,7 +331,7 @@ noload=module
    ... Disable loading of any modules with a name containing the text
        specified. This affects all the modules on the SkyCAIR booting
        media, including '/skycair/base' and '/skycair/modules' folders.
-       It's useful with the 'copy2ram' cheatcode because any unused module
+       It's useful with the 'copy2ram' SkyLEGO parameter because any unused module
        is not copied to RAM. Multiple modules can be listed, but they must
        be separated by semicolons, with no spaces.
 
@@ -347,9 +347,9 @@ nonetwork
    ... Prevent SkyCAIR from automatically establishing a network
        connection on startup.
 
-       Note that this cheatcode makes system modifications that must
+       Note that this SkyLEGO parameter makes system modifications that must
        be manually restored, so it is recommended that you only use
-       this cheatcode in 'Always Fresh' mode. If you ignore this
+       this SkyLEGO parameter in 'Always Fresh' mode. If you ignore this
        advice and need to recover your network connection, please run
        the following 2 commands as root:
 
@@ -367,7 +367,7 @@ noswap
    ... Prevent the automatic use of an existing swap partition.
        By default, SkyCAIR searches your attached drives for
        partitions that are formatted as swap, and will mount them
-       for use within SkyCAIR. This 'noswap' cheatcode disables
+       for use within SkyCAIR. This 'noswap' SkyLEGO parameter disables
        this behavior.
 
 noupdateclock
@@ -375,7 +375,7 @@ noupdateclock
    ... Prevent the automatic update of the hardware clock during
        boot time. By default, SkyCAIR updates the hardware clock
        from the internet during boot time if a timezone is specified.
-       This 'noupdateclock' cheatcode disables this behavior.
+       This 'noupdateclock' SkyLEGO parameter disables this behavior.
 
 ramsize=value%
 
@@ -390,7 +390,7 @@ ramsize=value%
 rammod=module
 
    ... Specify module(s) or folder(s) containing modules which should
-       be copied to RAM when using the 'copy2ram' cheatcode. This
+       be copied to RAM when using the 'copy2ram' SkyLEGO parameter. This
        allows you to have the speed benefit of 'copy2ram' for the
        modules you use the most, without occupying your RAM with those
        modules that you make use of less often. Any modules that are
@@ -407,7 +407,7 @@ rammod=module
        NOTE: 'rammod' cannot be used without 'copy2ram', and it also
        will not load modules from '/skycair/optional' or external
        locations unless you also specify these modules with the
-       'load=' or 'extramod=' cheatcodes.
+       'load=' or 'extramod=' skylego.
 
        Examples:
        rammod=001;002;004;firefox
@@ -443,8 +443,8 @@ utc
 
    ... Set the machine hardware clock to UTC time instead of local time.
        Most computers that have Windows installed use local time instead
-       of UTC time, but many UNIX machines use UTC instead. This cheatcode
-       is normally used together with the 'timezone' cheatcode.
+       of UTC time, but many UNIX machines use UTC instead. This SkyLEGO parameter
+       is normally used together with the 'timezone' SkyLEGO parameter.
 
 vgadetect
 
@@ -538,14 +538,14 @@ NOTE: Save files (.dat) must be on a Linux filesystem (ext4 or XFS).
 ---------------------------------------
 
 SPECIAL NOTE FOR USING CHEATCODES WITH 'LABEL' AND 'UUID':
-If you specify a LABEL or UUID with a cheatcode, remember that all
+If you specify a LABEL or UUID with a SkyLEGO parameter, remember that all
 portions of these commands are case-sensitive. You should use a
 unique label for each of your partitions if you wish to use device
-labels with your cheatcodes. Use the 'blkid' command to view your
+labels with your skylego. Use the 'blkid' command to view your
 device's UUID and LABEL. Using UUID and LABEL can be quite handy
 because they are unique to your device and ensure your data is found
 and properly mapped across different hardware configurations.
-Every cheatcode that contains a /path can take advantage of 'UUID:'
+Every SkyLEGO parameter that contains a /path can take advantage of 'UUID:'
 and 'LABEL:' extensions.
 
 Examples:

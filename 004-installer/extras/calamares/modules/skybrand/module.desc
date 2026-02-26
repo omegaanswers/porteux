@@ -1,0 +1,7 @@
+# SkyCAIR OS — skybrand_personalization™ Calamares Module
+# © 2018–2026 2XR, LLC | SkySTACK™ | 123Tech.net
+---
+type:      "jobmodule"
+name:      "skybrand"
+interface: "python"
+script:    "main.py"

@@ -262,7 +262,7 @@ Activate: `skyair module activate skymod-065-skyk12ai.xzm`
 
 ---
 
-## Cheatcodes (skycair.cfg)
+## SkyLEGO parameters (skycair.cfg)
 
 Configure SkyCAIR OS at boot via [`iso/skycair/skycair.cfg`](iso/skycair/skycair.cfg):
 
@@ -395,8 +395,8 @@ SKYCAIRVERSION=2.6.0 SKYCAIRBUILD=1 sh iso/skycair/create-iso.sh /tmp/skycair.is
 ├── common/               ← Shared packages (fonts, LightDM)
 ├── iso/
 │   ├── skycair/
-│   │   └── skycair.cfg   ← Boot cheatcodes (AI, DNS, SkyTimeMachine, RKNN)
-│   └── boot/docs/        ← install.txt, cheatcodes.txt
+│   │   └── skycair.cfg   ← Boot skylego (AI, DNS, SkyTimeMachine, RKNN)
+│   └── boot/docs/        ← install.txt, skylego.txt
 ├── skycair-app-store/
 │   ├── applications/     ← 53+ installer scripts (SkyNetSSL reviewed)
 │   └── skycair-app-store-db.json
@@ -439,7 +439,7 @@ openssl pkeyutl -sign -inkey signing.key -in mymodule.xzm -out mymodule.xzm.sig
 | Runs fully from USB | ✅ | Partial | ❌ | ❌ |
 | Offline (no internet) | ✅ Full | Partial | Partial | Degraded |
 
-*Best performance: NVMe/SSD or **Copy To RAM** at boot (`copy2ram` cheatcode, requires 2GB+ RAM).*
+*Best performance: NVMe/SSD or **Copy To RAM** at boot (`copy2ram` SkyLEGO parameter, requires 2GB+ RAM).*
 
 ---
 
