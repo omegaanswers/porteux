@@ -1,0 +1,11 @@
+---
+type:      "job"
+name:      "skypartition"
+interface: "python"
+script:    "main.py"
+comment:   >
+  SkyMEMBOOST Auto-Partition — detects hardware (RAM, DDR gen, PCIe NVMe gen),
+  calculates optimal GPT partition layout, creates all partitions, formats them,
+  creates ZFS pool skyvault on vault partition (all remaining space), and
+  initializes the SKYRESTORE recovery partition with module manifest.
+  User selects disk only — all sizing is automatic and repeatable.
